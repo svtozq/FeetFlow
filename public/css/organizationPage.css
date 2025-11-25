@@ -1,0 +1,89 @@
+/* Formulaire */
+.form-input {
+    border: 1px solid #d1d5db; /* gris clair */
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 100%;
+    outline: none;
+}
+
+.form-input:focus {
+    ring: 2px;
+    border-color: #3b82f6; /* bleu */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.btn-create {
+    background-color: #3b82f6; /* bleu */
+    color: black;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s;
+}
+
+.btn-create:hover {
+    background-color: #2563eb; /* bleu foncé */
+}
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    color: #374151; /* gris foncé */
+}
+
+.table tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Boutons */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-edit {
+    background-color: blueviolet;
+    color: black;
+    width: 108px;
+}
+
+.btn-edit:hover {
+    background-color: #eab308; /* jaune foncé */
+}
+
+.btn-delete {
+    background-color: #ef4444; /* rouge */
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #dc2626; /* rouge foncé */
+}
+
+/* Messages succès */
+.alert-success {
+    background-color: #d1fae5; /* vert clair */
+    color: #065f46; /* vert foncé */
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}

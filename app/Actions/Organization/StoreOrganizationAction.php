@@ -14,21 +14,24 @@ final class StoreOrganizationAction
      * @param OrganizationDTO $dto
      * @return array
      */
-    public function handle(OrganizationDTO $dto): array
+    public function handle(OrganizationDTO $dto): Organization
     {
-        return DB::transaction(function () use ($dto) {
-            $organization = Organization::create([
+        $organization = DB::transaction(function () use ($dto) {
+            $org = Organization::create([
                 'name' => $dto->name,
                 'user_id' => $dto->user_id,
             ]);
 
-            $organization->members()->create([
-                'user_id' => $dto->user_id,
+            $org->members()->attach($dto->user_id, [
                 'role' => 'admin',
             ]);
 
-            return $organization->load('members');
+            return $org;
         });
+
+        $organization->load('members');
+
+        return $organization;
     }
 
 }
