@@ -11,7 +11,8 @@ class DeleteOrganization extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $organization = $this->route('organization');
+        return $this->user()->can('delete', $organization);
     }
 
     /**

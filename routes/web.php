@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 👉 LA SEULE ROUTE QUI GÈRE LES SONDAGES :
     Route::resource('surveys', SurveyController::class);
+
+    //Management of organization
+    Route::get('/organizations', [OrganizationController::class, 'index'])
+        ->name('organizations.index');
+
+    Route::post('/organizations', [OrganizationController::class, 'createOrganization'])
+        ->name('organizations.store');
+
+    Route::get('/organizations/{organization}/edit', [OrganizationController::class, 'editOrganization'])
+        ->name('organizations.edit');
+
+    Route::put('/organizations/{organization}', [OrganizationController::class, 'updateOrganization'])
+        ->name('organizations.update');
+
+    Route::delete('/organizations/{organization}', [OrganizationController::class, 'deleteOrganization'])
+        ->name('organizations.delete');
 });
 
 require __DIR__.'/auth.php';

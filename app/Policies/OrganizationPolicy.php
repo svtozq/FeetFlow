@@ -29,7 +29,7 @@ class OrganizationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,6 +37,16 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization): bool
     {
+        // Get entry of OrganizationUser for this user
+        $membership = $organization->members()
+            ->where('user_id', $user->id)
+            ->first();
+
+        // verification of rol
+        if ($membership && $membership->pivot->role === 'admin') {
+            return true;
+        }
+
         return false;
     }
 
@@ -45,6 +55,16 @@ class OrganizationPolicy
      */
     public function delete(User $user, Organization $organization): bool
     {
+        // Get entry of OrganizationUser for this user
+        $membership = $organization->members()
+            ->where('user_id', $user->id)
+            ->first();
+
+        // Vérifier le rôle
+        if ($membership && $membership->pivot->role === 'admin') {
+            return true;
+        }
+
         return false;
     }
 

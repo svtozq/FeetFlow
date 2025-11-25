@@ -11,7 +11,8 @@ class UpdateOrganization extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $organization = $this->route('organization');
+        return $this->user()->can('update', $organization);
     }
 
     /**
@@ -22,7 +23,18 @@ class UpdateOrganization extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Le nom de l organisation est obligatoire.',
+        ];
+    }
+
 }
