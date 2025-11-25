@@ -21,7 +21,7 @@ final class DeleteOrganizationAction
         return DB::transaction(function () use ($dto) {
             $organization = Organization::findOrFail($dto->organization_id);
 
-            $organization->members()->delete();
+            $organization->members()->detach();
             $organization->delete();
 
             return [

@@ -18,17 +18,21 @@ use Illuminate\Http\Request;
 class OrganizationController extends Controller
 {
 
-    public function index() {
-        // get user as login
+    public function index()
+    {
         $user = auth()->user();
 
-        // get theirs organizations with the relation OrganizationUser
-        $memberships = OrganizationUser::where('user_id', $user->id)->get();
-        $organizations = $memberships->map(fn($m) => $m->organization->load('members'));
-
+        $organizations = Organization::whereHas('members', function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        })
+            ->with(['members' => function($q) {
+                $q->select('users.id', 'users.first_name', 'users.last_name');
+            }])
+            ->get();
 
         return view('organizationPage', compact('organizations'));
     }
+
 
 
     public function createOrganization(StoreOrganization $request): RedirectResponse
@@ -41,9 +45,8 @@ class OrganizationController extends Controller
         ]);
 
         // Add user like admin with relation
-        $organization->members()->create([
-            'user_id' => auth()->user()->id,
-            'role' => 'admin',
+        $organization->members()->attach(auth()->user()->id, [
+            'role' => 'admin'
         ]);
 
         // load people for the answer

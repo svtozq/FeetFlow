@@ -61,7 +61,7 @@ class OrganizationPolicy
             ->first();
 
         // Vérifier le rôle
-        if ($membership && $membership->role === 'admin') {
+        if ($membership && $membership->pivot->role === 'admin') {
             return true;
         }
 
