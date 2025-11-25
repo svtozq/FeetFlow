@@ -2,69 +2,81 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Survey\CloseSurveyAction;
 use App\Actions\Survey\StoreSurveyAction;
+use App\Actions\Survey\UpdateSurveyAction;
+use App\DTOs\OrganizationDTO;
 use App\DTOs\SurveyDTO;
+use App\Http\Requests\Organization\UpdateOrganization;
 use App\Http\Requests\Survey\StoreSurveyRequest;
+use App\Http\Requests\Survey\UpdateSurveyRequest;
+use App\Models\Organization;
 use App\Models\Survey;
 
 class SurveyController extends Controller
 {
-    public function index()
+    public function index(Organization $organization)
     {
-        $organizationId = session('current_organization_id');
-        $surveys = Survey::where('organization_id', $organizationId)->latest()->get();
-        return view('surveys.index', compact('surveys'));
-    }
+        // for display the surveys of this organization
+        $surveys = Survey::where('organization_id', $organization->id)
+            ->latest()
+            ->get();
 
-    public function create()
-    {
-        return view('surveys/create');
-    }
-
-
-    public function store(StoreSurveyRequest $request, StoreSurveyAction $action)
-    {
-        $dto = SurveyDTO::fromRequest($request);
-        $survey = $action->execute($dto);
-
-        return redirect()->route('surveys.show', $survey->id)
-            ->with('success', 'Sondage créé avec succès.');
-    }
-
-    public function show(Survey $survey)
-    {
-        return view('surveys.show', compact('survey'));
-    }
-
-    public function edit(Survey $survey)
-    {
-        $this->authorize('update', $survey);
-        return view('surveys.edit', compact('survey'));
-    }
-
-    public function update(StoreSurveyRequest $request, Survey $survey)
-    {
-        $this->authorize('update', $survey);
-
-        $dto = SurveyDTO::fromRequest($request);
-        $survey->update([
-            'title' => $dto->title,
-            'description' => $dto->description,
-            'start_date' => $dto->start_date,
-            'end_date' => $dto->end_date,
-            'is_anonymous' => $dto->is_anonymous,
+        return view('surveys.index', [
+            'organization' => $organization,
+            'surveys' => $surveys
         ]);
+    }
 
-        return redirect()->route('surveys.show', $survey->id)
+
+    public function pageCreate(Organization $organization)
+    {
+        $surveys = $organization->surveys;
+
+        return view('surveys.create', compact('organization', 'surveys'));
+    }
+
+
+
+    public function createSurveys(StoreSurveyRequest $request, Organization $organization)
+    {
+        $dto = SurveyDTO::fromRequest($request, $organization->id);
+
+        (new StoreSurveyAction())->execute($dto);
+
+        return redirect()
+            ->route('survey.index', $organization->id)
+            ->with('success', 'Sondage créé !');
+    }
+
+
+    public function editSurveys(Organization $organization, Survey $survey)
+    {
+        return view('surveys.edit', compact('organization', 'survey'));
+    }
+
+
+    public function updateSurveys(UpdateSurveyRequest $request, Organization $organization, Survey $survey)
+    {
+        $dto = SurveyDTO::fromRequest($request, $organization->id);
+
+        (new UpdateSurveyAction())->execute($survey, $dto);
+
+        return redirect()->route('survey.index', $organization->id)
             ->with('success', 'Sondage mis à jour avec succès.');
     }
 
-    public function destroy(Survey $survey)
-    {
-        $this->authorize('delete', $survey);
-        $survey->delete();
 
-        return redirect()->route('surveys.index')
+    public function deleteSurveys($organization, $survey_id, CloseSurveyAction $closeAction)
+    {
+        $survey = Survey::findOrFail($survey_id);
+
+        $closeAction->execute($survey);
+
+        return redirect()->route('survey.index', ['organization' => $organization])
             ->with('success', 'Sondage supprimé.');
     }
+
+
+
 }

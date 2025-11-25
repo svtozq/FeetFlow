@@ -31,7 +31,7 @@ class OrganizationController extends Controller
             }])
             ->get();
 
-        return view('organizationPage', compact('organizations'));
+        return view('Organization.organizationPage', compact('organizations'));
     }
 
 
@@ -65,7 +65,7 @@ class OrganizationController extends Controller
 
         $users = User::all();
 
-        return view('organizationEditPage', compact('organization', 'users'));
+        return view('Organization.organizationEditPage', compact('organization', 'users'));
 
     }
 

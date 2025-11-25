@@ -19,14 +19,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // 👉 LA SEULE ROUTE QUI GÈRE LES SONDAGES :
-    Route::get('survey', [SurveyController::class, 'create'])
-        ->name('survey.create');
+//SURVEYS
+    // Display surveys
+    Route::get('/organizations/{organization}/surveys', [SurveyController::class, 'index'])
+        ->name('survey.index');
 
-    Route::post('survey', [SurveyController::class, 'store'])
-        ->name('surveys.store');
+    // Display Create page for create surveys
+    Route::get('/organizations/{organization}/surveys/pageCreate', [SurveyController::class, 'pageCreate'])
+        ->name('surveys.pageCreate');
+
+    // For create surveys
+    Route::post('/organizations/{organization}/surveys', [SurveyController::class, 'createSurveys'])
+        ->name('surveys.createSurveys');
+
+    // For show edit form
+    Route::get('/organizations/{organization}/surveys/{survey}/edit', [SurveyController::class, 'editSurveys'])
+        ->name('surveys.edit');
+
+    // Update survey
+    Route::put('/organizations/{organization}/surveys/{survey}', [SurveyController::class, 'updateSurveys'])
+        ->name('surveys.update');
 
 
+    // For delete surveys
+    Route::delete('/organizations/{organization}/surveys/{survey_id}', [SurveyController::class, 'deleteSurveys'])
+        ->name('surveys.delete');
+
+
+
+//Organization
     //Management of organization
     Route::get('/organizations', [OrganizationController::class, 'index'])
         ->name('organizations.index');

@@ -28,24 +28,28 @@
                             <div class="flex gap-3 mt-3">
                                 <!-- Bouton Modifier (uniquement si autorisé) -->
                                 @can('update', $survey)
-                                    <a href="{{ route('surveys.edit', $survey) }}" class="text-blue-600 hover:underline">
+                                    <a href="{{ route('surveys.edit', [$organization->id, $survey->id]) }}" class="text-blue-600 hover:underline">
                                         Modifier
                                     </a>
                                 @endcan
 
                                 <!-- Bouton Supprimer (uniquement si autorisé) -->
                                 @can('delete', $survey)
-                                    <form action="{{ route('surveys.destroy', $survey) }}" method="POST" onsubmit="return confirm('Supprimer ce sondage ?');">
+                                    <form action="{{ route('surveys.delete', [$organization->id, $survey->id]) }}"
+                                          method="POST"
+                                    onsubmit="return confirm('Supprimer ce sondage ?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:underline">Supprimer</button>
                                     </form>
+
                                 @endcan
                             </div>
                         </div>
                     @endforeach
                 @endif
             </div>
+            <a href="{{ route('surveys.pageCreate', $organization->id) }}" class="btn btn-edit">Créer</a>
         </div>
     </div>
 </x-app-layout>

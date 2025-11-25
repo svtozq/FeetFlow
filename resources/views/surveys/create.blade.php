@@ -1,10 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">Créer un sondage</h2>
+        <h2 class="font-semibold text-xl text-gray-800">
+            Créer un sondage pour {{ $organization->name }}
+        </h2>
     </x-slot>
 
     <div class="max-w-3xl mx-auto py-6">
-        <form action="{{ route('surveys.store') }}" method="POST" class="space-y-5">
+        <form action="{{ route('surveys.createSurveys', $organization->id) }}" method="POST" class="space-y-5">
             @csrf
 
             @if($errors->any())
@@ -42,7 +44,7 @@
                 <label>Sondage anonyme</label>
             </div>
 
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+            <button type="submit" class="bg-blue-600 text-black px-4 py-2 rounded">
                 Créer
             </button>
         </form>

@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="max-w-3xl mx-auto py-6">
-        <form action="{{ route('surveys.update', $survey) }}" method="POST" class="space-y-5">
+        <form action="{{ route('surveys.update', [$organization->id, $survey->id]) }}" method="POST" class="space-y-5">
             @csrf
             @method('PUT')
 
@@ -49,9 +49,13 @@
                 <label>Sondage anonyme</label>
             </div>
 
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+            <button type="submit" class="bg-blue-600 text-black px-4 py-2 rounded">
                 Modifier
             </button>
+            <a href="{{ route('survey.index', $organization->id) }}"
+               class="bg-gray-300 px-4 py-2 rounded-full">
+                Annuler
+            </a>
         </form>
     </div>
 </x-app-layout>
