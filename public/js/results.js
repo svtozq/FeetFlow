@@ -1,47 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const data1 = {
-        labels: [
-            'right answers',
-            'wrong answers',
-        ],
+    const data = {
+        labels: ['right answers', 'wrong answers'],
         datasets: [{
             label: 'Survey result',
-            data: [25, 75],
+            data: [Number(right), Number(wrong)],
             backgroundColor: [
                 'rgb(56,255,0)',
                 'rgb(255,0,0)',
             ],
         }]
     }
-    const config1 = {
+    const config = {
         type: 'pie',
-        data: data1,
+        data: data,
     }
     new Chart(
         document.getElementById('myChart1'),
-        config1,
-    );
-
-    const data2 = {
-        labels: [
-            'right answers',
-            'wrong answers',
-        ],
-        datasets: [{
-            label: 'Survey result',
-            data: [75, 25],
-            backgroundColor: [
-                'rgb(56,255,0)',
-                'rgb(255,0,0)',
-            ],
-        }]
-    }
-    const config2 = {
-        type: 'pie',
-        data: data2,
-    }
-    new Chart(
-        document.getElementById('myChart2'),
-        config2,
+        config,
     );
 })

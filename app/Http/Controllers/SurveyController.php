@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+
 
 class SurveyController extends Controller
 {
-    public function chart($input1, $input2): View
+    public function chart(Request $request): View
     {
-        return view('results.chart', compact('input1', 'input2'));
+        $right = $request->input('input1');
+        $wrong = $request->input('input2');
+
+        session(['right' => $right, 'wrong' => $wrong]);
+        return view('results');
     }
 }
