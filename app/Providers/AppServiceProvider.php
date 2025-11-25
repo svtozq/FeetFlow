@@ -2,13 +2,18 @@
 
 namespace App\Providers;
 
+use App\Events\SurveyAnswerSubmitted;
+use App\Listeners\SendFinalReportOnClose;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    protected $listen = [
+        SurveyAnswerSubmitted::class => [
+            SendFinalReportOnClose::class,
+        ],
+    ];
+
     public function register(): void
     {
         //

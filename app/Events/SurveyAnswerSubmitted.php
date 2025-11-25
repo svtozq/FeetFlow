@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\SurveyAnswer;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,13 +15,22 @@ class SurveyAnswerSubmitted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public SurveyAnswer  $surveyAnswer;
+
+
+
     /**
      * Create a new event instance.
      */
-    public function __construct()
+
+    //utilisé dans Listener
+    public function __construct(SurveyAnswer $surveyAnswer)
     {
-        //
+        $this->surveyAnswer = $surveyAnswer;
     }
+
+
+
 
     /**
      * Get the channels the event should broadcast on.
