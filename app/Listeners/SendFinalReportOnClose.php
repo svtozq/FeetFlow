@@ -25,7 +25,7 @@ class SendFinalReportOnClose implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(SurveyAnswerSubmitted $event): void
+    public function handle(object $event): void
     {
         Mail::to('test@example.com')->send(new SurveySubmittedMail($event->surveyAnswer));
     }
