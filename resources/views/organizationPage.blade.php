@@ -62,6 +62,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-delete">Supprimer</button>
                                     </form>
+                                    <a href="{{ route('survey.store') }}" class="btn btn-edit">Sondage</a>
                                 </td>
                             </tr>
                         @endforeach

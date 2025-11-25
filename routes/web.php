@@ -20,7 +20,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // 👉 LA SEULE ROUTE QUI GÈRE LES SONDAGES :
-    Route::resource('surveys', SurveyController::class);
+    Route::get('survey', [SurveyController::class, 'create'])
+        ->name('survey.create');
+
+    Route::post('survey', [SurveyController::class, 'store'])
+        ->name('surveys.store');
+
 
     //Management of organization
     Route::get('/organizations', [OrganizationController::class, 'index'])

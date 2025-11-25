@@ -18,8 +18,9 @@ class SurveyController extends Controller
 
     public function create()
     {
-        return view('surveys.create');
+        return view('surveys/create');
     }
+
 
     public function store(StoreSurveyRequest $request, StoreSurveyAction $action)
     {
