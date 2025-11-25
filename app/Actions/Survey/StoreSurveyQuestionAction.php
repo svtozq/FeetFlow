@@ -1,21 +1,32 @@
 <?php
-namespace App\Actions\Survey;
 
-use App\DTOs\SurveyDTO;
-use Illuminate\Support\Facades\DB;
+namespace App\Http\Requests\Survey;
 
-final class StoreSurveyQuestionAction
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreSurveyRequest extends FormRequest
 {
-    public function __construct() {}
-
-    /**
-     * Store a Survey
-     * @param SurveyDTO $dto
-     * @return array
-     */
-    public function handle(SurveyDTO $dto): array
+    public function authorize(): bool
     {
-        return DB::transaction(function () use ($dto) {
-        });
+        // Tout utilisateur authentifié peut créer un sondage
+        return auth()->check();
+    }
+
+    public function rules(): array
+    {
+        return [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'is_anonymous' => 'nullable|boolean',
+        ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_anonymous' => $this->has('is_anonymous') ? 1 : 0,
+        ]);
     }
 }
