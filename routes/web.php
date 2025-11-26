@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -77,6 +78,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::delete('/organizations/{organization}', [OrganizationController::class, 'deleteOrganization'])
         ->name('organizations.delete');
+
+
+
+
 });
 
+
+
+Route::get('/surveys/{survey}/answer', [SurveyController::class, 'answerForm'])
+    ->name('survey.answer.form');
+
+Route::post('/surveys/{survey}/answer', [SurveyController::class, 'submitAnswer'])
+    ->name('survey.answer.submit');
+
+Route::get('/surveys/{survey}/thank-you', [SurveyController::class, 'thankYou'])
+    ->name('survey.answer.thankyou');
+
 require __DIR__.'/auth.php';
+
+
+
+
