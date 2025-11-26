@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Events\SurveyAnswerSubmitted;
-use App\Listeners\SendFinalReportOnClose;
 use App\Listeners\SendNewAnswerNotification;
+use App\Listeners\SendFinalReportOnClose;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +12,7 @@ class AppServiceProvider extends ServiceProvider
 {
     protected $listen = [
         SurveyAnswerSubmitted::class => [
-            SendFinalReportOnClose::class,
+            SendNewAnswerNotification::class,
         ],
     ];
 
@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Event::listen(
             SurveyAnswerSubmitted::class,
-            SendFinalReportOnClose::class
+            SendNewAnswerNotification::class
         );
     }
 }

@@ -2,18 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\SurveyAnswerSubmitted;
-use App\Http\Controllers\SurveyController;
-use App\Mail\SurveySubmittedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Mail;
 
-class SendFinalReportOnClose
+class SendFinalReportOnClose implements ShouldQueue
 {
-
-
-
+    use InteractsWithQueue;
     /**
      * Create the event listener.
      */
@@ -27,6 +21,6 @@ class SendFinalReportOnClose
      */
     public function handle(object $event): void
     {
-        Mail::to('test@example.com')->send(new SurveySubmittedMail($event->surveyAnswer));
+        //
     }
 }
