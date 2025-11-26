@@ -24,16 +24,17 @@
                 <div class="mb-6">
                     <label class="block font-semibold mb-2">Membres associés</label>
 
-                    <select name="members[]" multiple
-                            class="w-full border p-2 rounded h-40">
+                    <div class="grid grid-cols-2 gap-2"> <!-- grille pour organiser les checkbox -->
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}"
-                                    @if($organization->members->pluck('id')->contains($user->id)) selected @endif>
-                                {{ $user->first_name }}
-                            </option>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" name="members[]" value="{{ $user->id }}"
+                                       @if($organization->members->pluck('id')->contains($user->id)) checked @endif>
+                                <span>{{ $user->first_name }}</span>
+                            </label>
                         @endforeach
-                    </select>
+                    </div>
                 </div>
+
 
                 <!-- Boutons -->
                 <div class="flex space-x-4">

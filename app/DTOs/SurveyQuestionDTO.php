@@ -2,16 +2,22 @@
 
 namespace App\DTOs;
 
-use Illuminate\Http\Request;
-
-final class SurveyQuestionDTO
+class SurveyQuestionDTO
 {
-    private function __construct(
+    public function __construct(
+        public readonly int $survey_id,
+        public readonly string $type,
+        public readonly string $title,
+        public readonly ?array $data = null
     ) {}
 
-    public static function fromRequest(Request $request): self
+    public static function fromRequest($request, int $survey_id): self
     {
         return new self(
+            survey_id: $survey_id,
+            type: $request->type,
+            title: $request->title,
+            data: $request->data ?? null
         );
     }
 }
