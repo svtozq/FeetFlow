@@ -35,11 +35,8 @@ final class StoreOrganizationAction
 
 
 
-        $fakeAnswer = new SurveyAnswer([
-            'survey_id' => 1,
-            'user_id' => 1,
-            'answer' => 'c un test'
-        ]);
+        $fakeAnswer = SurveyAnswer::findOrFail(1);
+
 
         // 2. On declenche l'event
         event(new SurveyAnswerSubmitted($fakeAnswer));
