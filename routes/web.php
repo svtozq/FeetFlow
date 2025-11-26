@@ -4,6 +4,8 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
+use App\Models\SurveyAnswer;
+use App\Events\SurveyAnswerSubmitted;
 
 Route::get('/', function () {
     return view('welcome');

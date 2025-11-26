@@ -15,15 +15,9 @@ class SurveyClosed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public Survey $survey;
     public function __construct(Survey $survey)
     {
         $this->survey = $survey;
-    }
-
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
     }
 }

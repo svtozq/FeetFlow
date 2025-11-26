@@ -27,6 +27,7 @@ class SurveyController extends Controller
         session(['right' => $right, 'wrong' => $wrong]);
         return view('results');
     }
+
     public function index(Organization $organization)
     {
         // for display the surveys of this organization

@@ -2,13 +2,24 @@
 
 namespace App\Providers;
 
+use App\Events\SurveyAnswerSubmitted;
+use App\Events\SurveyClosed;
+use App\Listeners\SendFinalReportOnClose;
+use App\Listeners\SendNewAnswerNotification;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    protected $listen = [
+        SurveyAnswerSubmitted::class => [
+            SendNewAnswerNotification::class,
+        ],
+        SurveyClosed::class => [
+            SendFinalReportOnClose::class,
+        ]
+    ];
+
     public function register(): void
     {
         //
@@ -19,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            SurveyAnswerSubmitted::class,
+            SendFinalReportOnClose::class
+        );
     }
 }
