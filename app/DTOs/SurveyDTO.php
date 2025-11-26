@@ -2,16 +2,29 @@
 
 namespace App\DTOs;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
+use InvalidArgumentException;
 
-final class SurveyDTO
+class SurveyDTO
 {
-    private function __construct(
+    public function __construct(
+        public string $title,
+        public string $description,
+        public Carbon $start_date,
+        public Carbon $end_date,
+        public int $organization_id,
+        public readonly bool $is_anonymous,
     ) {}
 
-    public static function fromRequest(Request $request): self
+    public static function fromRequest($request,  int $organizationId): self
     {
         return new self(
+            title: $request->title,
+            description: $request->description,
+            start_date: Carbon::parse($request->start_date),
+            end_date: Carbon::parse($request->end_date),
+            organization_id: $organizationId,
+            is_anonymous: (bool) $request->is_anonymous
         );
     }
 }

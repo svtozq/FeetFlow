@@ -9,7 +9,7 @@ class SurveyQuestion extends Model
 {
     use HasFactory;
 
-    protected $table    = 'surveys';
+    protected $table    = 'survey_questions';
     public $timestamps  = true;
     protected $fillable = [
         'id', 'survey_id',
@@ -17,5 +17,14 @@ class SurveyQuestion extends Model
         'created_at', 'updated_at'
     ];
     protected $casts = [
+        'options' => 'array',
     ];
+
+
+    // Relation with Survey table
+    public function survey()
+    {
+        return $this->belongsTo(Survey::class);
+    }
+
 }

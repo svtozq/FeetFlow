@@ -12,6 +12,16 @@ class OrganizationUser extends Model
     protected $table    = 'organization_user';
     public $timestamps  = true;
     protected $fillable = [ 'id', 'user_id', 'organization_id', 'role', 'created_at', 'updated_at' ];
-    protected $casts = [
-    ];
+    protected $casts = [];
+
+
+    // Relation with Organization
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

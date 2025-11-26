@@ -11,7 +11,7 @@ class StoreOrganization extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,18 @@ class StoreOrganization extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+        ];
+    }
+
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Le nom de l organisation est obligatoire.',
         ];
     }
 }
