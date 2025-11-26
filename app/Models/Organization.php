@@ -22,4 +22,9 @@ class Organization extends Model
             ->withTimestamps();
     }
 
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class);
+    }
+
 }

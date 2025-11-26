@@ -1,96 +1,101 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
+        <h2 class="font-semibold text-2xl text-gray-800">
             Liste des sondages de l'organisme {{ $organization->name }}
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-6 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
             <!-- Message flash -->
             @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-400 text-green-700 rounded shadow">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="bg-white p-6 shadow sm:rounded-lg">
-                <h1 class="text-2xl font-bold mb-4">Mes sondages</h1>
+            <div class="bg-white p-6 shadow rounded-xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-gray-800">Mes sondages</h1>
+                    <a href="{{ route('surveys.pageCreate', $organization->id) }}" class="bg-blue-600 text-black font-semibold px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+                        Créer
+                    </a>
+                </div>
 
                 @if($surveys->isEmpty())
-                    <p>Aucun sondage pour le moment.</p>
+                    <p class="text-gray-600">Aucun sondage pour le moment.</p>
                 @else
-                    @foreach($surveys as $survey)
-                        <div class="p-4 border rounded mb-3">
-                            <h3 class="font-semibold">{{ $survey->title }}</h3>
-                            <p>Description : {{ $survey->description }}</p>
+                    <div class="space-y-6">
+                        @foreach($surveys as $survey)
+                            <div class="p-6 border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition bg-white">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $survey->title }}</h3>
+                                <p class="text-gray-600 mb-4">{{ $survey->description }}</p>
 
+                                <!-- Questions -->
+                                <div class="space-y-4">
+                                    @foreach($survey->questions as $question)
+                                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm">
+                                            <strong class="block text-gray-700 mb-2">{{ $question->title }}</strong>
 
-                            @foreach($survey->questions as $question)
-                                <div class="mb-4">
-                                    <div class="flex items-center gap-2">
-                                        <strong>Titre de la question :</strong>
-                                        <span>{{ $question->title }}</span>
-                                        <span class="text-sm text-gray-600"> Choix :</span>
-                                        @if($question->question_type === 'text')
-                                            <input type="text"
-                                                   name="question_{{ $question->id }}"
-                                                   class="border p-1 w-32"
-                                                   placeholder="Répondre…"
-                                            />
-                                        @elseif(in_array($question->question_type, ['radio','checkbox']))
-                                            <div class="flex gap-2 ml-2 flex-wrap">
-                                                @foreach($question->options ?? [] as $option)
-                                                    <label class="inline-flex items-center gap-1">
-                                                        <input
-                                                            type="{{ $question->question_type }}"
-                                                            name="question_{{ $question->id }}{{ $question->question_type === 'checkbox' ? '[]' : '' }}"
-                                                            value="{{ $option }}"
-                                                        >
-                                                        <span>{{ $option }}</span>
-                                                    </label>
-                                                @endforeach
-                                            </div>
-                                        @elseif($question->question_type === 'scale')
-                                            <div class="flex gap-2 ml-2">
-                                                @for($i=1;$i<=10;$i++)
-                                                    <label class="inline-flex items-center gap-1">
-                                                        <input type="radio" name="question_{{ $question->id }}" value="{{ $i }}">
-                                                        <span>{{ $i }}</span>
-                                                    </label>
-                                                @endfor
-                                            </div>
-                                        @endif
-                                    </div>
+                                            @if($question->question_type === 'text')
+                                                <input type="text" name="question_{{ $question->id }}" placeholder="Répondre..."
+                                                       class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                                            @elseif(in_array($question->question_type, ['radio','checkbox']))
+                                                <div class="flex gap-3 flex-wrap">
+                                                    @foreach($question->options ?? [] as $option)
+                                                        <label class="flex items-center gap-2 cursor-pointer">
+                                                            <input type="{{ $question->question_type }}"
+                                                                   name="question_{{ $question->id }}{{ $question->question_type === 'checkbox' ? '[]' : '' }}"
+                                                                   value="{{ $option }}"
+                                                                   class="accent-blue-500">
+                                                            <span>{{ $option }}</span>
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            @elseif($question->question_type === 'scale')
+                                                <div class="flex gap-2">
+                                                    @for($i=1;$i<=10;$i++)
+                                                        <label class="flex flex-col items-center text-sm cursor-pointer">
+                                                            <input type="radio" name="question_{{ $question->id }}" value="{{ $i }}" class="accent-blue-500">
+                                                            <span>{{ $i }}</span>
+                                                        </label>
+                                                    @endfor
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
 
+                                <!-- Actions -->
+                                <div class="flex flex-wrap gap-3 mt-4 items-center">
+                                    @can('update', $survey)
+                                        <a href="{{ route('surveys.edit', [$organization->id, $survey->id]) }}"
+                                           class="bg-yellow-400 text-gray-900 font-semibold px-4 py-2 rounded-lg shadow hover:bg-yellow-500 transition">
+                                            Modifier
+                                        </a>
+                                    @endcan
 
-                            <div class="flex gap-3 mt-3">
-                                <!-- Bouton Modifier (uniquement si autorisé) -->
-                                @can('update', $survey)
-                                    <a href="{{ route('surveys.edit', [$organization->id, $survey->id]) }}" class="text-blue-600 hover:underline">
-                                        Modifier
+                                    @can('delete', $survey)
+                                        <form action="{{ route('surveys.delete', [$organization->id, $survey->id]) }}" method="POST" onsubmit="return confirm('Supprimer ce sondage ?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-red-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
+                                                Supprimer
+                                            </button>
+                                        </form>
+                                    @endcan
+
+                                    <a href="{{ route('surveys.pageCreateQuestion', [$organization->id, $survey->id]) }}"
+                                       class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
+                                        Ajouter des questions
                                     </a>
-                                @endcan
-
-                                <!-- Bouton Supprimer (uniquement si autorisé) -->
-                                @can('delete', $survey)
-                                    <form action="{{ route('surveys.delete', [$organization->id, $survey->id]) }}"
-                                          method="POST"
-                                    onsubmit="return confirm('Supprimer ce sondage ?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:underline">Supprimer</button>
-                                    </form>
-                                @endcan
+                                </div>
                             </div>
-                            <a href="{{ route('surveys.pageCreateQuestion', [$organization->id, $survey->id]) }}" class="btn btn-edit">Ajouter des questions</a>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 @endif
             </div>
-            <a href="{{ route('surveys.pageCreate', $organization->id) }}" class="btn btn-edit">Créer</a>
         </div>
     </div>
 </x-app-layout>
