@@ -21,6 +21,8 @@ class Survey extends Model
     ];
 
     protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
     ];
 
     //Relation with user table

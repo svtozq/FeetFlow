@@ -37,10 +37,4 @@ class CheckForSurveyToClose extends Command
         $this->info('All surveys got checked !');
         return 0;
     }
-
-    protected function schedule(Schedule $schedule)
-    {
-        $schedule->command('app:check-for-survey-to-close')->everyMinute();
-
-    }
 }

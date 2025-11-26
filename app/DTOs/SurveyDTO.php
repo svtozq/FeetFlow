@@ -22,8 +22,8 @@ class SurveyDTO
         return new self(
             title: $request->title,
             description: $request->description,
-            start_date: Carbon::parse($request->start_date),
-            end_date: Carbon::parse($request->end_date),
+            start_date: Carbon::parse($request->start_date)->startOfDay(),
+            end_date: Carbon::parse($request->end_date)->startOfDay(),
             closed: (bool) $request->closed,
             organization_id: $organizationId,
             is_anonymous: (bool) $request->is_anonymous

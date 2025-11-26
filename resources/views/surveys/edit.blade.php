@@ -34,13 +34,13 @@
             <!-- Date début -->
             <div>
                 <label class="font-medium">Date de début</label>
-                <input type="datetime-local" name="start_date" value="{{ old('start_date', $survey->start_date) }}" class="border p-2 w-full">
+                <input type="date" name="start_date" value="{{ old('start_date', optional($survey->start_date)->format('Y-m-d')) }}" class="border p-2 w-full">
             </div>
 
             <!-- Date fin -->
             <div>
                 <label class="font-medium">Date de fin</label>
-                <input type="datetime-local" name="end_date" value="{{ old('end_date', $survey->end_date) }}" class="border p-2 w-full">
+                <input type="date" name="end_date" value="{{ old('end_date', optional($survey->end_date)->format('Y-m-d')) }}" class="border p-2 w-full">
             </div>
 
             <!-- Anonyme ? -->
