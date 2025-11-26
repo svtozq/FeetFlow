@@ -73,7 +73,7 @@ class SurveyController extends Controller
     {
         $survey = Survey::findOrFail($survey_id);
 
-        $closeAction->execute($survey);
+        $survey->delete();
 
         return redirect()->route('survey.index', ['organization' => $organization])
             ->with('success', 'Sondage supprimé.');

@@ -26,27 +26,24 @@
 
             <div>
                 <label class="font-medium">Type de question</label>
-                <select name="question_type" class="border p-2 w-full" required>
-                    <option value="radio" {{ old('question_type') == 'radio' ? 'selected' : '' }}>Choix unique</option>
+                <select id="question_type" name="question_type" class="border p-2 w-full" required>
+                <option value="radio" {{ old('question_type') == 'radio' ? 'selected' : '' }}>Choix unique</option>
                     <option value="checkbox" {{ old('question_type') == 'checkbox' ? 'selected' : '' }}>Choix multiple</option>
                     <option value="text" {{ old('question_type') == 'text' ? 'selected' : '' }}>Texte</option>
                     <option value="scale" {{ old('question_type') == 'scale' ? 'selected' : '' }}>Échelle 1-10</option>
                 </select>
             </div>
 
-            @if(old('question_type') == 'radio' || old('question_type') == 'checkbox')
-                <div class="space-y-2">
-                    <label class="font-medium">Options</label>
-                    <input type="text" name="options[]" class="border p-2 w-full" placeholder="Option 1" value="{{ old('options.0') }}">
-                    <input type="text" name="options[]" class="border p-2 w-full" placeholder="Option 2" value="{{ old('options.1') }}">
-                    <input type="text" name="options[]" class="border p-2 w-full" placeholder="Option 3" value="{{ old('options.2') }}">
-                    <!-- L'utilisateur peut remplir autant d'options qu'il veut -->
-                </div>
-            @endif
+            <div id="options-container" class="mt-2"></div>
 
             <button type="submit" class="bg-blue-600 text-black px-4 py-2 rounded">
                 Ajouter la question
             </button>
+            <a href="{{ route('survey.index', $organization->id) }}"
+               class="bg-gray-300 px-4 py-2 rounded-full">
+                Annuler
+            </a>
         </form>
     </div>
+    <script type="module" src="{{asset('js/choiseOption.js')}}"></script>
 </x-app-layout>

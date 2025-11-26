@@ -25,13 +25,44 @@
                             <h3 class="font-semibold">{{ $survey->title }}</h3>
                             <p>Description : {{ $survey->description }}</p>
 
+
                             @foreach($survey->questions as $question)
-                                <p><strong>{{ $question->title }}</strong> ({{ $question->question_type }})</p>
-                                @if(in_array($question->question_type, ['radio','checkbox']))
-                                    @foreach(json_decode($question->data ?? '[]') as $option)
-                                        <span>- {{ $option }}</span><br>
-                                    @endforeach
-                                @endif
+                                <div class="mb-4">
+                                    <div class="flex items-center gap-2">
+                                        <strong>Titre de la question :</strong>
+                                        <span>{{ $question->title }}</span>
+                                        <span class="text-sm text-gray-600"> Choix :</span>
+                                        @if($question->question_type === 'text')
+                                            <input type="text"
+                                                   name="question_{{ $question->id }}"
+                                                   class="border p-1 w-32"
+                                                   placeholder="Répondre…"
+                                            />
+                                        @elseif(in_array($question->question_type, ['radio','checkbox']))
+                                            <div class="flex gap-2 ml-2 flex-wrap">
+                                                @foreach($question->options ?? [] as $option)
+                                                    <label class="inline-flex items-center gap-1">
+                                                        <input
+                                                            type="{{ $question->question_type }}"
+                                                            name="question_{{ $question->id }}{{ $question->question_type === 'checkbox' ? '[]' : '' }}"
+                                                            value="{{ $option }}"
+                                                        >
+                                                        <span>{{ $option }}</span>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        @elseif($question->question_type === 'scale')
+                                            <div class="flex gap-2 ml-2">
+                                                @for($i=1;$i<=10;$i++)
+                                                    <label class="inline-flex items-center gap-1">
+                                                        <input type="radio" name="question_{{ $question->id }}" value="{{ $i }}">
+                                                        <span>{{ $i }}</span>
+                                                    </label>
+                                                @endfor
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
                             @endforeach
 
 

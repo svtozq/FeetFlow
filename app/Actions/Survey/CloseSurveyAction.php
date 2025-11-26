@@ -17,7 +17,6 @@ final class CloseSurveyAction
     public function execute(Survey $survey): void
     {
         DB::transaction(function () use ($survey) {
-            $survey->delete();
         });
     }
 }
