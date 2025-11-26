@@ -59,7 +59,6 @@
                     @endforeach
                 @endif
             </div>
-            <a href="{{ route('surveys.pageCreateQuestion', [$organization->id, $survey->id]) }}" class="btn btn-edit">Ajouter des questions</a>
             <a href="{{ route('surveys.pageCreate', $organization->id) }}" class="btn btn-edit">Créer</a>
         </div>
     </div>
