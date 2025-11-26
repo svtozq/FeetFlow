@@ -19,13 +19,22 @@ class Survey extends Model
         'is_anonymous',
     ];
 
+    //Relation with user table
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    //Relation with Organization table
     public function organization()
     {
         return $this->belongsTo(Organization::class);
     }
+
+    //Relation with SurveyQuestion table
+    public function questions()
+    {
+        return $this->hasMany(SurveyQuestion::class, 'survey_id');
+    }
+
 }

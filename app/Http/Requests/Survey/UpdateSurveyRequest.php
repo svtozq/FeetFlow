@@ -18,7 +18,7 @@ class UpdateSurveyRequest extends FormRequest
             'description'  => 'required|string',
             'start_date'   => 'required|date|before_or_equal:end_date',
             'end_date'     => 'required|date|after_or_equal:start_date',
-            'is_anonymous' => 'nullable|boolean', // ✅ nullable pour checkbox décochée
+            'is_anonymous' => 'nullable|boolean',
         ];
     }
 

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800">
-            Liste des sondages
+            Liste des sondages de l'organisme {{ $organization->name }}
         </h2>
     </x-slot>
 
@@ -23,7 +23,17 @@
                     @foreach($surveys as $survey)
                         <div class="p-4 border rounded mb-3">
                             <h3 class="font-semibold">{{ $survey->title }}</h3>
-                            <p>{{ $survey->description }}</p>
+                            <p>Description : {{ $survey->description }}</p>
+
+                            @foreach($survey->questions as $question)
+                                <p><strong>{{ $question->title }}</strong> ({{ $question->question_type }})</p>
+                                @if(in_array($question->question_type, ['radio','checkbox']))
+                                    @foreach(json_decode($question->data ?? '[]') as $option)
+                                        <span>- {{ $option }}</span><br>
+                                    @endforeach
+                                @endif
+                            @endforeach
+
 
                             <div class="flex gap-3 mt-3">
                                 <!-- Bouton Modifier (uniquement si autorisé) -->
@@ -42,13 +52,14 @@
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:underline">Supprimer</button>
                                     </form>
-
                                 @endcan
                             </div>
+                            <a href="{{ route('surveys.pageCreateQuestion', [$organization->id, $survey->id]) }}" class="btn btn-edit">Ajouter des questions</a>
                         </div>
                     @endforeach
                 @endif
             </div>
+            <a href="{{ route('surveys.pageCreateQuestion', [$organization->id, $survey->id]) }}" class="btn btn-edit">Ajouter des questions</a>
             <a href="{{ route('surveys.pageCreate', $organization->id) }}" class="btn btn-edit">Créer</a>
         </div>
     </div>

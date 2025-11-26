@@ -47,6 +47,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
+//SURVEYS QUESTIONS
+    // For show Create form
+    Route::get('/organizations/{organization}/surveys/{survey_id}/createPage', [SurveyController::class, 'pageCreateQuestion'])
+        ->name('surveys.pageCreateQuestion');
+
+    // For Create Questions
+    Route::post('/organizations/{organization}/surveys/{survey_id}/question', [SurveyController::class, 'createQuestion'])
+        ->name('surveys.createQuestion');
+
+
+
+
+
+
 //Organization
     //Management of organization
     Route::get('/organizations', [OrganizationController::class, 'index'])

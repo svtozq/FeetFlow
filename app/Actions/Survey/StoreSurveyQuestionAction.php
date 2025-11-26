@@ -1,32 +1,33 @@
 <?php
+namespace App\Actions\Survey;
 
-namespace App\Http\Requests\Survey;
+use App\DTOs\SurveyDTO;
+use App\Models\Survey;
+use App\Models\SurveyQuestion;
+use Illuminate\Support\Facades\DB;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class StoreSurveyRequest extends FormRequest
+final class StoreSurveyQuestionAction
 {
-    public function authorize(): bool
-    {
-        // Tout utilisateur authentifié peut créer un sondage
-        return auth()->check();
-    }
+    public function __construct() {}
 
-    public function rules(): array
+    /**
+     * Store a Survey
+     * @param SurveyDTO $dto
+     * @return array
+     */
+    public function execute(array $data, int $survey_id): SurveyQuestion
     {
-        return [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'is_anonymous' => 'nullable|boolean',
-        ];
-    }
+        return DB::transaction(function () use ($data, $survey_id) {
+            $options = in_array($data['question_type'], ['radio', 'checkbox'])
+                ? json_encode($data['options'] ?? [])
+                : null;
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'is_anonymous' => $this->has('is_anonymous') ? 1 : 0,
-        ]);
+            return SurveyQuestion::create([
+                'survey_id' => $survey_id,
+                'title' => $data['title'],
+                'question_type' => $data['question_type'],
+                'data' => $options,
+            ]);
+        });
     }
 }

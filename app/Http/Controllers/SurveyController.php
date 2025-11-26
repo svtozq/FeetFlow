@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Actions\Survey\CloseSurveyAction;
 use App\Actions\Survey\StoreSurveyAction;
+use App\Actions\Survey\StoreSurveyQuestionAction;
 use App\Actions\Survey\UpdateSurveyAction;
 use App\DTOs\OrganizationDTO;
 use App\DTOs\SurveyDTO;
 use App\Http\Requests\Organization\UpdateOrganization;
+use App\Http\Requests\Survey\StoreSurveyQuestionRequest;
 use App\Http\Requests\Survey\StoreSurveyRequest;
 use App\Http\Requests\Survey\UpdateSurveyRequest;
 use App\Models\Organization;
@@ -76,6 +78,28 @@ class SurveyController extends Controller
         return redirect()->route('survey.index', ['organization' => $organization])
             ->with('success', 'Sondage supprimé.');
     }
+
+
+    // For question of surveys
+    public function pageCreateQuestion($organization_id, $survey_id)
+    {
+        $organization = Organization::findOrFail($organization_id);
+        $survey = Survey::findOrFail($survey_id);
+
+        return view('surveys.createQuestion', compact('organization', 'survey'));
+    }
+
+
+    public function createQuestion(StoreSurveyQuestionRequest $request, $organization, $survey_id, StoreSurveyQuestionAction $action)
+    {
+        $survey = Survey::findOrFail($survey_id);
+
+        $action->execute($request->validated(), $survey->id);
+
+        return redirect()->route('survey.index', $survey->organization_id)
+            ->with('success', 'Question ajoutée !');
+    }
+
 
 
 
