@@ -16,6 +16,7 @@ class Survey extends Model
         'description',
         'start_date',
         'end_date',
+        'closed',
         'is_anonymous',
     ];
 
