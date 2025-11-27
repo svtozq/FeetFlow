@@ -73,16 +73,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/organizations', [OrganizationController::class, 'index'])
         ->name('organizations.index');
 
-    Route::post('/organizations', [OrganizationController::class, 'createOrganization'])
+    Route::post('/organizations/create', [OrganizationController::class, 'createOrganization'])
         ->name('organizations.store');
 
     Route::get('/organizations/{organization}/edit', [OrganizationController::class, 'editOrganization'])
         ->name('organizations.edit');
 
-    Route::put('/organizations/{organization}', [OrganizationController::class, 'updateOrganization'])
+    Route::put('/organizations/{organization}/update', [OrganizationController::class, 'updateOrganization'])
         ->name('organizations.update');
 
-    Route::delete('/organizations/{organization}', [OrganizationController::class, 'deleteOrganization'])
+    Route::delete('/organizations/{organization}/delete', [OrganizationController::class, 'deleteOrganization'])
         ->name('organizations.delete');
 });
 
