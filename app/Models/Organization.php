@@ -14,7 +14,7 @@ class Organization extends Model
     protected $fillable = [ 'id', 'name', 'user_id', 'created_at', 'updated_at' ];
     protected $casts = [];
 
-    // Relation with OrganizationUser
+    // Relation with OrganizationUser for defined the role
     public function members()
     {
         return $this->belongsToMany(User::class, 'organization_user')
@@ -22,6 +22,7 @@ class Organization extends Model
             ->withTimestamps();
     }
 
+    // For association with Surveys
     public function surveys()
     {
         return $this->hasMany(Survey::class);

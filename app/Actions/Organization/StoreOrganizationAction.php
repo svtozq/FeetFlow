@@ -18,12 +18,14 @@ final class StoreOrganizationAction
      */
     public function handle(OrganizationDTO $dto): Organization
     {
+        //Create a new organization in to database
         $organization = DB::transaction(function () use ($dto) {
             $org = Organization::create([
                 'name' => $dto->name,
                 'user_id' => $dto->user_id,
             ]);
 
+            // Add information into relation Organization and Organization_user
             $org->members()->attach($dto->user_id, [
                 'role' => 'admin',
             ]);
@@ -32,15 +34,6 @@ final class StoreOrganizationAction
         });
 
         $organization->load('members');
-
-
-
-        $fakeAnswer = SurveyAnswer::findOrFail(1);
-
-
-        // 2. On declenche l'event
-        event(new SurveyAnswerSubmitted($fakeAnswer));
-
         return $organization;
     }
 

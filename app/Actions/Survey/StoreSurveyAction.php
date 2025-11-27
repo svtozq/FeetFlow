@@ -10,6 +10,7 @@ class StoreSurveyAction
 {
     public function execute(SurveyDTO $dto): Survey
     {
+        //Create a new survey into Survey Table
         return Survey::create([
             'title' => $dto->title,
             'description' => $dto->description,

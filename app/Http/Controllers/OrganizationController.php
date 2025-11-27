@@ -21,10 +21,16 @@ use Illuminate\Http\Request;
 class OrganizationController extends Controller
 {
     use AuthorizesRequests;
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index()
     {
+        // take user connected
         $user = auth()->user();
 
+        //take Organization where user are member
         $organizations = Organization::whereHas('members', function ($q) use ($user) {
             $q->where('user_id', $user->id);
         })
@@ -37,11 +43,16 @@ class OrganizationController extends Controller
     }
 
 
-
+    /**
+     * @param StoreOrganization $request
+     * @return RedirectResponse
+     */
     public function createOrganization(StoreOrganization $request): RedirectResponse
     {
+        //Take data of Dto
         $organizationDTO = OrganizationDTO::fromRequest($request);
 
+        //Call action
         (new StoreOrganizationAction())->handle($organizationDTO);
 
         return redirect()
@@ -49,8 +60,15 @@ class OrganizationController extends Controller
             ->with('success', 'Organisation créée avec succès !');
     }
 
+    /**
+     * @param UpdateOrganization $request
+     * @param Organization $organization
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function updateOrganization(UpdateOrganization $request, Organization $organization)
     {
+        // authorization of who can make action
         $this->authorize('update', $organization);
         $dto = OrganizationDTO::fromRequest($request, $organization->id);
 
@@ -62,6 +80,11 @@ class OrganizationController extends Controller
             ->with('success', 'Organisation mise à jour avec succès !');
     }
 
+    /**
+     * @param Organization $organization
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function editOrganization(Organization $organization)
     {
         $this->authorize('update', $organization);
@@ -74,6 +97,12 @@ class OrganizationController extends Controller
     }
 
 
+    /**
+     * @param DeleteOrganization $request
+     * @param Organization $organization
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function deleteOrganization(DeleteOrganization $request, Organization $organization)
     {

@@ -6,10 +6,17 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSurveyRequest extends FormRequest
 {
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return $this->user()->can('update', $this->survey);
     }
+
+    /**
+     * @return string[]
+     */
 
     public function rules(): array
     {
@@ -22,6 +29,9 @@ class UpdateSurveyRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return void
+     */
     public function prepareForValidation()
     {
         $this->merge([

@@ -6,11 +6,17 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreSurveyRequest extends FormRequest
 {
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return auth()->check();
     }
 
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
@@ -22,6 +28,9 @@ class StoreSurveyRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return void
+     */
     protected function prepareForValidation()
     {
         $this->merge([

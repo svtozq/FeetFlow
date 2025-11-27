@@ -21,6 +21,11 @@ use Illuminate\Http\Request;
 class SurveyController extends Controller
 {
     use AuthorizesRequests;
+
+    /**
+     * @param Request $request
+     * @return View
+     */
     public function chart(Request $request): View
     {
         $right = $request->input('input1');
@@ -30,6 +35,10 @@ class SurveyController extends Controller
         return view('results');
     }
 
+    /**
+     * @param $token
+     * @return View
+     */
     public function share($token): View
     {
         $survey = Survey::where('token', $token)->first();
@@ -40,8 +49,14 @@ class SurveyController extends Controller
         ]);
     }
 
+    /**
+     * @param Organization $organization
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function index(Organization $organization)
     {
+        // authorization of who can make action
         $this->authorize('viewAny', [Survey::class, $organization]);
 
         // for display the surveys of this organization
@@ -56,7 +71,11 @@ class SurveyController extends Controller
         ]);
     }
 
-
+    /**
+     * @param Organization $organization
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function pageCreate(Organization $organization)
     {
         $this->authorize('create', [Survey::class, $organization]);
@@ -66,12 +85,22 @@ class SurveyController extends Controller
     }
 
 
+    /**
+     * @param StoreSurveyRequest $request
+     * @param Organization $organization
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function createSurveys(StoreSurveyRequest $request, Organization $organization)
     {
+
         $this->authorize('create', [Survey::class, $organization]);
+
+        // This DTO centralizes and validates all necessary survey data
         $dto = SurveyDTO::fromRequest($request, $organization->id);
 
+        // Call the action that handles the actual creation of the survey in the database
         (new StoreSurveyAction())->execute($dto);
 
         return redirect()
@@ -79,6 +108,12 @@ class SurveyController extends Controller
             ->with('success', 'Sondage créé !');
     }
 
+    /**
+     * @param Organization $organization
+     * @param Survey $survey
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function editSurveys(Organization $organization, Survey $survey)
     {
@@ -86,6 +121,13 @@ class SurveyController extends Controller
         return view('surveys.edit', compact('organization', 'survey'));
     }
 
+    /**
+     * @param UpdateSurveyRequest $request
+     * @param Organization $organization
+     * @param Survey $survey
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function updateSurveys(UpdateSurveyRequest $request, Organization $organization, Survey $survey)
     {
@@ -98,6 +140,12 @@ class SurveyController extends Controller
             ->with('success', 'Sondage mis à jour avec succès.');
     }
 
+    /**
+     * @param $organization
+     * @param $survey_id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function deleteSurveys($organization, $survey_id)
     {
@@ -109,6 +157,12 @@ class SurveyController extends Controller
             ->with('success', 'Sondage supprimé.');
     }
 
+    /**
+     * @param $organization_id
+     * @param $survey_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     // For question of surveys
     public function pageCreateQuestion($organization_id, $survey_id)
@@ -121,6 +175,14 @@ class SurveyController extends Controller
         return view('surveys.createQuestion', compact('organization', 'survey'));
     }
 
+    /**
+     * @param StoreSurveyQuestionRequest $request
+     * @param $organization
+     * @param $survey_id
+     * @param StoreSurveyQuestionAction $action
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function createQuestion(StoreSurveyQuestionRequest $request, $organization, $survey_id, StoreSurveyQuestionAction $action)
     {
@@ -135,7 +197,11 @@ class SurveyController extends Controller
     }
 
 
-
+    /**
+     * @param Survey $survey
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function answerPage(Survey $survey)
     {
@@ -146,7 +212,11 @@ class SurveyController extends Controller
         return view('surveys.answer', compact('survey'));
     }
 
-
+    /**
+     * @param Survey $survey
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 
     public function thankYou(Survey $survey)
     {
@@ -157,6 +227,13 @@ class SurveyController extends Controller
         ]);
     }
 
+    /**
+     * @param StoreSurveyAnswerRequest $request
+     * @param Survey $survey
+     * @param StoreSurveyAnswerAction $action
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function submitAnswer(StoreSurveyAnswerRequest $request, Survey $survey, StoreSurveyAnswerAction $action)
     {
         $this->authorize('view', $survey);
@@ -168,11 +245,5 @@ class SurveyController extends Controller
             ->route('survey.answerThankYou', $survey)
             ->with('success', 'Merci pour votre participation !');
     }
-
-
-
-
-
-
 
 }

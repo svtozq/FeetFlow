@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         optionsContainer.innerHTML = '';
 
         if (type === 'radio' || type === 'checkbox') {
-            // Label pour nombre d'options
+            // Label for number of options
             const labelNb = document.createElement('label');
             labelNb.textContent = "Nombre d'options : ";
             labelNb.className = 'block mb-1 font-medium';
@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
             optionsContainer.appendChild(labelNb);
             optionsContainer.appendChild(selectNb);
 
-            // Container pour les inputs des options
+            // Container for option inputs
             const optionsDiv = document.createElement('div');
             optionsDiv.id = 'options_inputs';
             optionsContainer.appendChild(optionsDiv);
 
-            // Fonction pour générer les inputs
+            // Function to generate the inputs
             function generateInputs(n) {
                 optionsDiv.innerHTML = '';
                 for (let i = 0; i < n; i++) {
@@ -54,11 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 generateInputs(n);
             });
 
-            // Créer initialement 1 input
+            // Initially create 1 input
             generateInputs(parseInt(selectNb.value));
         }
     }
 
     selectType.addEventListener('change', renderOptions);
-    renderOptions(); // Initial render
+    renderOptions();
 });

@@ -11,7 +11,7 @@ final class StoreSurveyQuestionAction
     public function __construct() {}
 
     /**
-     * Store a Survey
+     * Store a SurveyQuestion
      * @param SurveyDTO $dto
      * @return array
      */
@@ -23,15 +23,16 @@ final class StoreSurveyQuestionAction
             if (in_array($data['question_type'], ['radio', 'checkbox'])) {
 
                 if (!empty($data['options_text'])) {
+                    //For clean the cut
                     $lines = preg_split('/\r\n|\r|\n/', $data['options_text']);
                     $cleaned = array_filter(array_map('trim', $lines));
                     $options = array_values($cleaned);
                 } else {
-
                     $options = $data['options'] ?? [];
                 }
             }
 
+            //Create a new question in dataBase for Survey
             return SurveyQuestion::create([
                 'survey_id'     => $survey_id,
                 'title'         => $data['title'],

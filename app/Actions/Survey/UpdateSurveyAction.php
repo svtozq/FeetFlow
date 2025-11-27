@@ -9,6 +9,7 @@ class UpdateSurveyAction
 {
     public function execute(Survey $survey, SurveyDTO $dto): Survey
     {
+        // Update the modification of surveys into dataBase
         $survey->update([
             'title' => $dto->title,
             'description' => $dto->description,
