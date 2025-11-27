@@ -24,15 +24,22 @@ final class StoreSurveyAnswerAction
                     continue;
                 }
 
+                $answer = $answerData['answer'];
+
+                if (is_array($answer)) {
+                    $answer = array_values(array_filter(array_map('trim', $answer)));
+                    $answer = json_encode($answer);
+                }
+
                 $created[] = SurveyAnswer::create([
                     'survey_id'          => $dto->survey->id,
                     'survey_question_id' => $answerData['survey_question_id'],
                     'user_id'            => $dto->respondent?->id,
-                    'answer'             => $answerData['answer'],
+                    'answer'             => $answer,
                 ]);
             }
 
-            // Story 5 : on déclenche l’évènement
+            // call event SurveyAnswerSubmitted
             event(new SurveyAnswerSubmitted($dto->survey, $created, $dto->respondent));
 
             return $created;

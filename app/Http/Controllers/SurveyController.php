@@ -117,15 +117,14 @@ class SurveyController extends Controller
 
 
 
-    public function answerForm(Survey $survey)
+    public function answerPage(Survey $survey)
     {
-        // on charge les questions pour le formulaire
+        // load the questions
         $survey->load('questions');
 
-        return view('surveys.answer', [
-            'survey' => $survey,
-        ]);
+        return view('surveys.answer', compact('survey'));
     }
+
 
 
     public function thankYou(Survey $survey)
@@ -135,23 +134,17 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function submitAnswer(
-        StoreSurveyAnswerRequest $request,
-        Survey $survey,
-        StoreSurveyAnswerAction $action
-    ) {
-        $dto = SurveyAnswerDTO::fromRequest(
-            $request,
-            $survey,
-            auth()->user() // peut être null
-        );
+    public function submitAnswer(StoreSurveyAnswerRequest $request, Survey $survey, StoreSurveyAnswerAction $action)
+    {
+        $dto = SurveyAnswerDTO::fromRequest($request, $survey, auth()->user());
 
         $action->handle($dto);
 
         return redirect()
-            ->route('survey.answer.thankyou', $survey)
+            ->route('survey.answerThankYou', $survey)
             ->with('success', 'Merci pour votre participation !');
     }
+
 
 
 

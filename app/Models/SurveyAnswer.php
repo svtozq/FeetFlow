@@ -22,6 +22,5 @@ class SurveyAnswer extends Model
     ];
 
     protected $casts = [
-        // si tu as besoin plus tard (json, etc.)
     ];
 }

@@ -92,6 +92,10 @@
                                         Ajouter des questions
                                     </a>
                                     @endcan
+                                        <a href="{{ route('survey.answerPage', $survey) }}"
+                                           class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
+                                            Repondre au sondage
+                                        </a>
                                 </div>
                             </div>
                         @endforeach

@@ -64,6 +64,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/organizations/{organization}/surveys/{survey_id}/question', [SurveyController::class, 'createQuestion'])
         ->name('surveys.createQuestion');
 
+//SURVEYS QUESTIONS ANSWER
+    Route::get('/surveys/{survey}/answer', [SurveyController::class, 'answerPage'])
+        ->name('survey.answerPage');
+
+    Route::post('/surveys/{survey}/answer', [SurveyController::class, 'submitAnswer'])
+        ->name('survey.submitAnswer');
+
+    Route::get('/surveys/{survey}/thank-you', [SurveyController::class, 'thankYou'])
+        ->name('survey.answerThankYou');
+
+
 
 
 
@@ -93,14 +104,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('/surveys/{survey}/answer', [SurveyController::class, 'answerForm'])
-    ->name('survey.answer.form');
 
-Route::post('/surveys/{survey}/answer', [SurveyController::class, 'submitAnswer'])
-    ->name('survey.answer.submit');
-
-Route::get('/surveys/{survey}/thank-you', [SurveyController::class, 'thankYou'])
-    ->name('survey.answer.thankyou');
 
 require __DIR__.'/auth.php';
 

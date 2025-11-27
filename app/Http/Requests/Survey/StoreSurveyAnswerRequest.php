@@ -8,7 +8,6 @@ class StoreSurveyAnswerRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // anonyme ou connecté -> ok pour tout le monde
         return true;
     }
 
