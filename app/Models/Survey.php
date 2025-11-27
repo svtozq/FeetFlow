@@ -16,7 +16,13 @@ class Survey extends Model
         'description',
         'start_date',
         'end_date',
+        'closed',
         'is_anonymous',
+    ];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
     ];
 
     //Relation with user table

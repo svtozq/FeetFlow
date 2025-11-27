@@ -2,11 +2,15 @@
 
 namespace App\Listeners;
 
+use App\Mail\DailyAnswerMail;
+use App\Mail\SurveySubmittedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
-class SendDailyReport
+class SendDailyReport implements ShouldQueue
 {
+    use InteractsWithQueue;
     /**
      * Create the event listener.
      */
@@ -20,6 +24,11 @@ class SendDailyReport
      */
     public function handle(object $event): void
     {
-        //
+
+        // celui qui crée le sondage
+
+        $surveyCreator = $event->survey->surveyCreator;
+
+        Mail::to($surveyCreator->email)->send(new DailyAnswerMail($event->dailyAnswer));
     }
 }

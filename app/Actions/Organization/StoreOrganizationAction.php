@@ -2,7 +2,9 @@
 namespace App\Actions\Organization;
 
 use App\DTOs\OrganizationDTO;
+use App\Events\SurveyAnswerSubmitted;
 use App\Models\Organization;
+use App\Models\SurveyAnswer;
 use Illuminate\Support\Facades\DB;
 
 final class StoreOrganizationAction
@@ -30,6 +32,14 @@ final class StoreOrganizationAction
         });
 
         $organization->load('members');
+
+
+
+        $fakeAnswer = SurveyAnswer::findOrFail(1);
+
+
+        // 2. On declenche l'event
+        event(new SurveyAnswerSubmitted($fakeAnswer));
 
         return $organization;
     }

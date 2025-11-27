@@ -38,12 +38,12 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="font-medium text-gray-700 mb-1 block">Date de début</label>
-                    <input type="datetime-local" name="start_date" value="{{ old('start_date', $survey->start_date) }}"
+                    <input type="date" name="start_date" value="{{ old('start_date', optional($survey->start_date)->format('Y-m-d')) }}"
                            class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
                 </div>
                 <div>
                     <label class="font-medium text-gray-700 mb-1 block">Date de fin</label>
-                    <input type="datetime-local" name="end_date" value="{{ old('end_date', $survey->end_date) }}"
+                    <input type="date" name="end_date" value="{{ old('end_date', optional($survey->end_date)->format('Y-m-d')) }}"
                            class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
                 </div>
             </div>

@@ -1,22 +1,16 @@
 <?php
 namespace App\Actions\Survey;
 
-use App\DTOs\SurveyDTO;
+use App\Events\SurveyClosed;
 use App\Models\Survey;
 use Illuminate\Support\Facades\DB;
 
 final class CloseSurveyAction
 {
-    public function __construct() {}
-
-    /**
-     * Store a Survey
-     * @param SurveyDTO $dto
-     * @return array
-     */
-    public function execute(Survey $survey): void
+    public function execute(Survey $survey): Survey
     {
-        DB::transaction(function () use ($survey) {
-        });
+        $survey->refresh();
+
+        return $survey;
     }
 }

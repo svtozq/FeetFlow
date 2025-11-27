@@ -16,4 +16,9 @@ class SurveyPolicy
     {
         return $user->id === $survey->user_id || $user->is_admin;
     }
+
+    public function create(User $user, Survey $survey): bool
+    {
+        return $user->id === $survey->user_id || $user->is_admin;
+    }
 }

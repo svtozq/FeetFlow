@@ -86,10 +86,12 @@
                                         </form>
                                     @endcan
 
+                                    @can('create', $survey)
                                     <a href="{{ route('surveys.pageCreateQuestion', [$organization->id, $survey->id]) }}"
                                        class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
                                         Ajouter des questions
                                     </a>
+                                    @endcan
                                 </div>
                             </div>
                         @endforeach

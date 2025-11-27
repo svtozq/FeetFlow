@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Survey\CloseSurveyAction;
 use App\Actions\Survey\StoreSurveyAction;
 use App\Actions\Survey\StoreSurveyQuestionAction;
 use App\Actions\Survey\UpdateSurveyAction;
@@ -14,13 +13,25 @@ use App\Http\Requests\Survey\StoreSurveyRequest;
 use App\Http\Requests\Survey\UpdateSurveyRequest;
 use App\Models\Organization;
 use App\Models\Survey;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class SurveyController extends Controller
 {
+    public function chart(Request $request): View
+    {
+        $right = $request->input('input1');
+        $wrong = $request->input('input2');
+
+        session(['right' => $right, 'wrong' => $wrong]);
+        return view('results');
+    }
+
     public function index(Organization $organization)
     {
         // for display the surveys of this organization
         $surveys = Survey::where('organization_id', $organization->id)
+            ->where('closed', 0)
             ->latest()
             ->get();
 
@@ -69,7 +80,7 @@ class SurveyController extends Controller
     }
 
 
-    public function deleteSurveys($organization, $survey_id, CloseSurveyAction $closeAction)
+    public function deleteSurveys($organization, $survey_id)
     {
         $survey = Survey::findOrFail($survey_id);
 
