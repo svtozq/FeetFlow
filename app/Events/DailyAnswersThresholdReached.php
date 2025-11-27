@@ -17,8 +17,8 @@ class DailyAnswersThresholdReached
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Survey $survey;
-    public Collection $answers;
+    public Survey $survey;  //info du questionnaire
+    public Collection $answers; //stocker les reponse d'hier
 
     /**
      * Create a new event instance.
