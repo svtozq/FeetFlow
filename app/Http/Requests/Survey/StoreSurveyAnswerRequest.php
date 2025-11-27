@@ -6,23 +6,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreSurveyAnswerRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        // anonyme ou connecté -> ok pour tout le monde
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'answers'                       => ['required', 'array', 'min:1'],
+            'answers.*.survey_question_id'  => ['required', 'integer', 'exists:survey_questions,id'],
+            'answers.*.answer'              => ['required'],
         ];
     }
 }

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Survey\StoreSurveyAction;
+use App\Actions\Survey\StoreSurveyAnswerAction;
 use App\Actions\Survey\StoreSurveyQuestionAction;
 use App\Actions\Survey\UpdateSurveyAction;
 use App\DTOs\OrganizationDTO;
+use App\DTOs\SurveyAnswerDTO;
 use App\DTOs\SurveyDTO;
 use App\Http\Requests\Organization\UpdateOrganization;
+use App\Http\Requests\Survey\StoreSurveyAnswerRequest;
 use App\Http\Requests\Survey\StoreSurveyQuestionRequest;
 use App\Http\Requests\Survey\StoreSurveyRequest;
 use App\Http\Requests\Survey\UpdateSurveyRequest;
@@ -110,6 +113,47 @@ class SurveyController extends Controller
         return redirect()->route('survey.index', $survey->organization_id)
             ->with('success', 'Question ajoutée !');
     }
+
+
+
+
+    public function answerForm(Survey $survey)
+    {
+        // on charge les questions pour le formulaire
+        $survey->load('questions');
+
+        return view('surveys.answer', [
+            'survey' => $survey,
+        ]);
+    }
+
+
+    public function thankYou(Survey $survey)
+    {
+        return view('surveys.thankyou', [
+            'survey' => $survey,
+        ]);
+    }
+
+    public function submitAnswer(
+        StoreSurveyAnswerRequest $request,
+        Survey $survey,
+        StoreSurveyAnswerAction $action
+    ) {
+        $dto = SurveyAnswerDTO::fromRequest(
+            $request,
+            $survey,
+            auth()->user() // peut être null
+        );
+
+        $action->handle($dto);
+
+        return redirect()
+            ->route('survey.answer.thankyou', $survey)
+            ->with('success', 'Merci pour votre participation !');
+    }
+
+
 
 
 
