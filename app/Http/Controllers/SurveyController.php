@@ -6,10 +6,9 @@ use App\Actions\Survey\StoreSurveyAction;
 use App\Actions\Survey\StoreSurveyAnswerAction;
 use App\Actions\Survey\StoreSurveyQuestionAction;
 use App\Actions\Survey\UpdateSurveyAction;
-use App\DTOs\OrganizationDTO;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\DTOs\SurveyAnswerDTO;
 use App\DTOs\SurveyDTO;
-use App\Http\Requests\Organization\UpdateOrganization;
 use App\Http\Requests\Survey\StoreSurveyAnswerRequest;
 use App\Http\Requests\Survey\StoreSurveyQuestionRequest;
 use App\Http\Requests\Survey\StoreSurveyRequest;
@@ -21,6 +20,7 @@ use Illuminate\Http\Request;
 
 class SurveyController extends Controller
 {
+    use AuthorizesRequests;
     public function chart(Request $request): View
     {
         $right = $request->input('input1');
@@ -42,6 +42,8 @@ class SurveyController extends Controller
 
     public function index(Organization $organization)
     {
+        $this->authorize('viewAny', [Survey::class, $organization]);
+
         // for display the surveys of this organization
         $surveys = Survey::where('organization_id', $organization->id)
             ->where('closed', 0)
@@ -57,6 +59,7 @@ class SurveyController extends Controller
 
     public function pageCreate(Organization $organization)
     {
+        $this->authorize('create', [Survey::class, $organization]);
         $surveys = $organization->surveys;
 
         return view('surveys.create', compact('organization', 'surveys'));
@@ -66,6 +69,7 @@ class SurveyController extends Controller
 
     public function createSurveys(StoreSurveyRequest $request, Organization $organization)
     {
+        $this->authorize('create', [Survey::class, $organization]);
         $dto = SurveyDTO::fromRequest($request, $organization->id);
 
         (new StoreSurveyAction())->execute($dto);
@@ -78,12 +82,14 @@ class SurveyController extends Controller
 
     public function editSurveys(Organization $organization, Survey $survey)
     {
+        $this->authorize('update', $survey);
         return view('surveys.edit', compact('organization', 'survey'));
     }
 
 
     public function updateSurveys(UpdateSurveyRequest $request, Organization $organization, Survey $survey)
     {
+        $this->authorize('update', $survey);
         $dto = SurveyDTO::fromRequest($request, $organization->id);
 
         (new UpdateSurveyAction())->execute($survey, $dto);
@@ -96,7 +102,7 @@ class SurveyController extends Controller
     public function deleteSurveys($organization, $survey_id)
     {
         $survey = Survey::findOrFail($survey_id);
-
+        $this->authorize('delete', $survey);
         $survey->delete();
 
         return redirect()->route('survey.index', ['organization' => $organization])
@@ -110,6 +116,8 @@ class SurveyController extends Controller
         $organization = Organization::findOrFail($organization_id);
         $survey = Survey::findOrFail($survey_id);
 
+        $this->authorize('update', $survey);
+
         return view('surveys.createQuestion', compact('organization', 'survey'));
     }
 
@@ -117,6 +125,8 @@ class SurveyController extends Controller
     public function createQuestion(StoreSurveyQuestionRequest $request, $organization, $survey_id, StoreSurveyQuestionAction $action)
     {
         $survey = Survey::findOrFail($survey_id);
+
+        $this->authorize('update', $survey);
 
         $action->execute($request->validated(), $survey->id);
 
@@ -129,6 +139,7 @@ class SurveyController extends Controller
 
     public function answerPage(Survey $survey)
     {
+        $this->authorize('view', $survey);
         // load the questions
         $survey->load('questions');
 
@@ -139,6 +150,8 @@ class SurveyController extends Controller
 
     public function thankYou(Survey $survey)
     {
+        $this->authorize('view', $survey);
+
         return view('surveys.thankyou', [
             'survey' => $survey,
         ]);
@@ -146,6 +159,7 @@ class SurveyController extends Controller
 
     public function submitAnswer(StoreSurveyAnswerRequest $request, Survey $survey, StoreSurveyAnswerAction $action)
     {
+        $this->authorize('view', $survey);
         $dto = SurveyAnswerDTO::fromRequest($request, $survey, auth()->id());
 
         $action->handle($dto);

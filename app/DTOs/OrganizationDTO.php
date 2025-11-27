@@ -23,13 +23,15 @@ final class OrganizationDTO
         );
     }
 
-//    public static function fromId(int $organizationId, Request $request): self
-//    {
-//        return new self(
-//            name: null,
-//            user_id: $request->user()->id,
-//            organization_id: $organizationId,
-//            members: $request->members ?? [],
-//        );
-//    }
+
+    // FromRequest for a particular organization
+    public static function fromId(int $organizationId, Request $request): self
+    {
+        return new self(
+            name: null,
+            user_id: $request->user()->id,
+            organization_id: $organizationId,
+            members: $request->members ?? [],
+        );
+    }
 }

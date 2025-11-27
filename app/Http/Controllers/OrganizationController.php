@@ -6,7 +6,7 @@ use App\Actions\Organization\DeleteOrganizationAction;
 use App\Actions\Organization\StoreOrganizationAction;
 use App\Actions\Organization\UpdateOrganizationAction;
 use App\DTOs\OrganizationDTO;
-use App\Events\SurveyAnswerSubmitted;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\Organization\DeleteOrganization;
 use App\Http\Requests\Organization\StoreOrganization;
 use App\Http\Requests\Organization\UpdateOrganization;
@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
 {
-
+    use AuthorizesRequests;
     public function index()
     {
         $user = auth()->user();
@@ -51,6 +51,7 @@ class OrganizationController extends Controller
 
     public function updateOrganization(UpdateOrganization $request, Organization $organization)
     {
+        $this->authorize('update', $organization);
         $dto = OrganizationDTO::fromRequest($request, $organization->id);
 
         (new UpdateOrganizationAction())->handle($dto);
@@ -63,6 +64,7 @@ class OrganizationController extends Controller
 
     public function editOrganization(Organization $organization)
     {
+        $this->authorize('update', $organization);
         $organization->load('members');
 
         $users = User::all();
@@ -75,6 +77,7 @@ class OrganizationController extends Controller
 
     public function deleteOrganization(DeleteOrganization $request, Organization $organization)
     {
+        $this->authorize('delete', $organization);
         $dto = OrganizationDTO::fromId( $organization->id, $request);
         $result = (new DeleteOrganizationAction())->handle($dto);
 

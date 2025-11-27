@@ -69,14 +69,11 @@
 
                                 <!-- Actions -->
                                 <div class="flex flex-wrap gap-3 mt-4 items-center">
-                                    @can('update', $survey)
                                         <a href="{{ route('surveys.edit', [$organization->id, $survey->id]) }}"
                                            class="bg-yellow-400 text-gray-900 font-semibold px-4 py-2 rounded-lg shadow hover:bg-yellow-500 transition">
                                             Modifier
                                         </a>
-                                    @endcan
 
-                                    @can('delete', $survey)
                                         <form action="{{ route('surveys.delete', [$organization->id, $survey->id]) }}" method="POST" onsubmit="return confirm('Supprimer ce sondage ?');">
                                             @csrf
                                             @method('DELETE')
@@ -84,14 +81,12 @@
                                                 Supprimer
                                             </button>
                                         </form>
-                                    @endcan
 
-                                    @can('create', $survey)
                                     <a href="{{ route('surveys.pageCreateQuestion', [$organization->id, $survey->id]) }}"
                                        class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
                                         Ajouter des questions
                                     </a>
-                                    @endcan
+
 
                                     @can('share', $survey)
                                     <!-- Actions and Modal: wrap both button and modal in the same x-data -->
@@ -131,12 +126,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ route('survey.answerPage', $survey) }}"
-                                           class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
-                                            Repondre au sondage
-                                        </a>
+
                                     </div>
                                     @endcan
+                                    <a href="{{ route('survey.answerPage', $survey) }}"
+                                       class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
+                                        Repondre au sondage
+                                    </a>
                                 </div>
                             </div>
                         @endforeach
