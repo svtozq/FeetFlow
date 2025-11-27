@@ -21,6 +21,14 @@ final class DeleteOrganizationAction
         return DB::transaction(function () use ($dto) {
             $organization = Organization::findOrFail($dto->organization_id);
 
+            foreach ($organization->surveys as $survey) {
+                // delete questions of survey
+                $survey->questions()->delete();
+
+                // delete survey
+                $survey->delete();
+            }
+
             $organization->members()->detach();
             $organization->delete();
 

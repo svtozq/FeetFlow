@@ -29,7 +29,7 @@ class DailyAnswerMail extends Mailable
 
     public function build(){
 
-        return $this->subject('rapport quotidien dusondage : ' . $this->survey->title) //on recup le titre
+        return $this->subject('rapport quotidien du sondage : ' . $this->survey->title) //on recup le titre
             ->view('emails.daily-Answer-Mail')
             ->with([
                 'survey'  => $this->survey,

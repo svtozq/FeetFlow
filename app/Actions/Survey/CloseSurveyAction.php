@@ -11,8 +11,6 @@ final class CloseSurveyAction
     {
         $survey->refresh();
 
-        event(new SurveyClosed($survey));
-
         return $survey;
     }
 }

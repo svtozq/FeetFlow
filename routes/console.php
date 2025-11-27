@@ -12,3 +12,7 @@ Artisan::command('app:send-survey-daily-reports', function () {})->purpose('Send
 
 Schedule::command('app:send-survey-daily-reports')
     ->dailyAt('11:45');
+
+Schedule::command('app:check-for-survey-to-close')
+    ->dailyAt('10:08')
+    ->withoutOverlapping();

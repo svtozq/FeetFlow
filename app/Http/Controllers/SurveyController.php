@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Survey\CloseSurveyAction;
 use App\Actions\Survey\StoreSurveyAction;
+use App\Actions\Survey\StoreSurveyAnswerAction;
 use App\Actions\Survey\StoreSurveyQuestionAction;
 use App\Actions\Survey\UpdateSurveyAction;
 use App\DTOs\OrganizationDTO;
+use App\DTOs\SurveyAnswerDTO;
 use App\DTOs\SurveyDTO;
 use App\Http\Requests\Organization\UpdateOrganization;
+use App\Http\Requests\Survey\StoreSurveyAnswerRequest;
 use App\Http\Requests\Survey\StoreSurveyQuestionRequest;
 use App\Http\Requests\Survey\StoreSurveyRequest;
 use App\Http\Requests\Survey\UpdateSurveyRequest;
@@ -32,6 +34,7 @@ class SurveyController extends Controller
     {
         // for display the surveys of this organization
         $surveys = Survey::where('organization_id', $organization->id)
+            ->where('closed', 0)
             ->latest()
             ->get();
 
@@ -80,11 +83,11 @@ class SurveyController extends Controller
     }
 
 
-    public function deleteSurveys($organization, $survey_id, CloseSurveyAction $closeAction)
+    public function deleteSurveys($organization, $survey_id)
     {
         $survey = Survey::findOrFail($survey_id);
 
-        $closeAction->execute($survey);
+        $survey->delete();
 
         return redirect()->route('survey.index', ['organization' => $organization])
             ->with('success', 'Sondage supprimé.');
@@ -110,6 +113,40 @@ class SurveyController extends Controller
         return redirect()->route('survey.index', $survey->organization_id)
             ->with('success', 'Question ajoutée !');
     }
+
+
+
+
+    public function answerPage(Survey $survey)
+    {
+        // load the questions
+        $survey->load('questions');
+
+        return view('surveys.answer', compact('survey'));
+    }
+
+
+
+    public function thankYou(Survey $survey)
+    {
+        return view('surveys.thankyou', [
+            'survey' => $survey,
+        ]);
+    }
+
+    public function submitAnswer(StoreSurveyAnswerRequest $request, Survey $survey, StoreSurveyAnswerAction $action)
+    {
+        $dto = SurveyAnswerDTO::fromRequest($request, $survey, auth()->user());
+
+        $action->handle($dto);
+
+        return redirect()
+            ->route('survey.answerThankYou', $survey)
+            ->with('success', 'Merci pour votre participation !');
+    }
+
+
+
 
 
 

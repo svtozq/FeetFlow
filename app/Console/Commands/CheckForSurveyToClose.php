@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Models\Survey;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 
 class CheckForSurveyToClose extends Command
 {
@@ -19,9 +20,11 @@ class CheckForSurveyToClose extends Command
 
     public function handle()
     {
+        Log::info('CheckForSurveyToClose called at ' . now());
+
         $this->info('Check each survey end date..');
         // Get surveys reaching end date
-        $surveys = Survey::whereDate('end_date', Carbon::today())
+        $surveys = Survey::whereDate('end_date', '<', today())
                             ->where('closed', 0)
                             ->get();
 
@@ -31,16 +34,11 @@ class CheckForSurveyToClose extends Command
 
             Event::dispatch(new SurveyClosed($survey));
 
+            Log::info("Survey #{$survey->id} closed at " . now());
             $this->info("The Survey #{$survey->id} entitled {$survey->title} expired, it just got closed on {$survey->end_date} !");
         }
 
         $this->info('All surveys got checked !');
         return 0;
-    }
-
-    protected function schedule(Schedule $schedule)
-    {
-        $schedule->command('app:check-for-survey-to-close')->everyMinute();
-
     }
 }

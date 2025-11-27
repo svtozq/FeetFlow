@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\SurveyAnswer;
 use App\Events\SurveyAnswerSubmitted;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -63,6 +64,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/organizations/{organization}/surveys/{survey_id}/question', [SurveyController::class, 'createQuestion'])
         ->name('surveys.createQuestion');
 
+//SURVEYS QUESTIONS ANSWER
+    Route::get('/surveys/{survey}/answer', [SurveyController::class, 'answerPage'])
+        ->name('survey.answerPage');
+
+    Route::post('/surveys/{survey}/answer', [SurveyController::class, 'submitAnswer'])
+        ->name('survey.submitAnswer');
+
+    Route::get('/surveys/{survey}/thank-you', [SurveyController::class, 'thankYou'])
+        ->name('survey.answerThankYou');
+
+
 
 
 
@@ -73,17 +85,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/organizations', [OrganizationController::class, 'index'])
         ->name('organizations.index');
 
-    Route::post('/organizations', [OrganizationController::class, 'createOrganization'])
+    Route::post('/organizations/create', [OrganizationController::class, 'createOrganization'])
         ->name('organizations.store');
 
     Route::get('/organizations/{organization}/edit', [OrganizationController::class, 'editOrganization'])
         ->name('organizations.edit');
 
-    Route::put('/organizations/{organization}', [OrganizationController::class, 'updateOrganization'])
+    Route::put('/organizations/{organization}/update', [OrganizationController::class, 'updateOrganization'])
         ->name('organizations.update');
 
-    Route::delete('/organizations/{organization}', [OrganizationController::class, 'deleteOrganization'])
+    Route::delete('/organizations/{organization}/delete', [OrganizationController::class, 'deleteOrganization'])
         ->name('organizations.delete');
+
+
+
+
 });
 
+
+
+
+
 require __DIR__.'/auth.php';
+
+
+
+
