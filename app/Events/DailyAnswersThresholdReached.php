@@ -17,19 +17,17 @@ class DailyAnswersThresholdReached
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Survey $survey;  //info du questionnaire
-    public Collection $answers; //stocker les reponse d'hier
+    public Survey $survey;  //infos du questionnaire
+    public Collection $answers; //stocker les reponse depuis hier
 
     /**
-     * Create a new event instance.
+     * enregistre les données a transmettre au constructeur
      */
     public function __construct(Survey $survey, Collection $answers)
     {
         $this->survey = $survey;
         $this->answers = $answers;
     }
-
-
 
     /**
      * Get the channels the event should broadcast on.

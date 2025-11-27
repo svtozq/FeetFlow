@@ -25,13 +25,15 @@ class SendNewAnswerNotification
 
 
     /**
-     * Handle the event.
+     * Fonction declenché lors de la soumission des reponses
      */
     public function handle(SurveyAnswerSubmitted $event): void
     {
 
+        //l'utilisateur proprietaire du sondage
         $surveyOwner = $event->survey->user;
 
+        //envoie de l'email au proprietaire
         Mail::to($surveyOwner->email)->send(new SurveySubmittedMail($event->survey,$event->respondent,$event->answers));
     }
 }

@@ -23,7 +23,7 @@ class SurveySubmittedMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
+     * Stocker les donnée a envoyer au Blade
      */
     public function __construct(
 

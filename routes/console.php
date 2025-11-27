@@ -8,10 +8,10 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Artisan::command('app:send-survey-daily-reports', function () {})->purpose('Send daily survey report when more than 10 responses');
+
 
 Schedule::command('app:send-survey-daily-reports')
-    ->dailyAt('11:45');
+    ->dailyAt('22:40');
 
 Schedule::command('app:check-for-survey-to-close')
     ->dailyAt('10:08')

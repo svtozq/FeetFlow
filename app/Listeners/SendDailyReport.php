@@ -11,22 +11,22 @@ use App\Events\DailyAnswersThresholdReached;
 
 
 
-class SendDailyReport implements ShouldQueue
+
+
+
+class SendDailyReport
 {
-    use InteractsWithQueue;
+
 
     /**
-     * Handle the event.
+     * Fonction declenché automatiquement lors de l'appel
      */
-    public function handle(object $event): void
+    public function handle(DailyAnswersThresholdReached $event): void
     {
-
         // celui qui crée le sondage
-
         $surveyCreator = $event->survey->user;
 
-
-
+        //envoie du mail (sans Queue)
         Mail::to($surveyCreator->email)->send(new DailyAnswerMail($event->survey,$event->answers));
     }
 }

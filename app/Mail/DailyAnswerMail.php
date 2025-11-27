@@ -16,10 +16,10 @@ class DailyAnswerMail extends Mailable
     use Queueable, SerializesModels;
 
     public Survey $survey;
-    public Collection $answers;
+    public Collection $answers; //
 
     /**
-     * Create a new message instance.
+     * Stocker les donnée a envoyer au Blade
      */
     public function __construct(Survey $survey, Collection $answers)
     {
@@ -29,8 +29,11 @@ class DailyAnswerMail extends Mailable
 
     public function build(){
 
-        return $this->subject('rapport quotidien du sondage : ' . $this->survey->title) //on recup le titre
+        //on recupère le titre
+        return $this->subject('rapport quotidien du sondage : ' . $this->survey->title)
+            //envoie au blade
             ->view('emails.daily-Answer-Mail')
+            //envoie des differentes données necessaire
             ->with([
                 'survey'  => $this->survey,
                 'answers' => $this->answers,
