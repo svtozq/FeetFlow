@@ -21,6 +21,10 @@ Route::get('/results', function () {
 
 Route::post('/results', [SurveyController::class, 'chart'])->name('results.chart');
 
+// Display surveys
+Route::get('/survey/{token}', [SurveyController::class, 'share'])
+    ->name('survey.share');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -46,7 +50,6 @@ Route::middleware('auth')->group(function () {
     // Update survey
     Route::put('/organizations/{organization}/surveys/{survey}', [SurveyController::class, 'updateSurveys'])
         ->name('surveys.update');
-
 
     // For delete surveys
     Route::delete('/organizations/{organization}/surveys/{survey_id}', [SurveyController::class, 'deleteSurveys'])

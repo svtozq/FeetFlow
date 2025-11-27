@@ -27,6 +27,16 @@ class SurveyController extends Controller
         return view('results');
     }
 
+    public function share($token): View
+    {
+        $survey = Survey::where('token', $token)->first();
+
+        return view('surveys.shareIndex', [
+            'token' => $token,
+            'survey' => $survey
+        ]);
+    }
+
     public function index(Organization $organization)
     {
         // for display the surveys of this organization

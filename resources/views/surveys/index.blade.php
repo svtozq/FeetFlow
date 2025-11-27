@@ -92,6 +92,47 @@
                                         Ajouter des questions
                                     </a>
                                     @endcan
+
+                                    @can('share', $survey)
+                                    <!-- Actions and Modal: wrap both button and modal in the same x-data -->
+                                    <div x-data="{ open: false }" class="relative">
+                                        <button
+                                            @click="open = true"
+                                            class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition"
+                                        >
+                                            Partager
+                                        </button>
+
+                                        <!-- Modal Background -->
+                                        <div
+                                            x-show="open"
+                                            x-cloak
+                                            x-transition.opacity
+                                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                                        >
+                                            <!-- Modal Box -->
+                                            <div @click.away="open = false" class="bg-white p-6 rounded-lg shadow-lg w-96">
+                                                <h2 class="text-xl font-bold mb-4">Share this Survey</h2>
+
+                                                <p class="text-gray-700 mb-2">Copy this link:</p>
+
+                                                <input type="text"
+                                                       readonly
+                                                       class="w-full border p-2 rounded"
+                                                       value="{{ route('survey.share', [$survey->token]) }}">
+
+                                                <div class="flex justify-end mt-4">
+                                                    <button
+                                                        @click="open = false"
+                                                        class="px-4 py-2 bg-gray-300 rounded"
+                                                    >
+                                                        Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endcan
                                 </div>
                             </div>
                         @endforeach
