@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\SurveyAnswerSubmitted;
 use App\Http\Controllers\SurveyController;
 use App\Mail\SurveySubmittedMail;
+use App\Models\SurveyAnswer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
@@ -22,11 +23,15 @@ class SendNewAnswerNotification
         //
     }
 
+
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(SurveyAnswerSubmitted $event): void
     {
-        Mail::to('test@example.com')->send(new SurveySubmittedMail($event->surveyAnswer));
+
+        $surveyOwner = $event->survey->user;
+
+        Mail::to($surveyOwner->email)->send(new SurveySubmittedMail($event->survey,$event->respondent,$event->answers));
     }
 }

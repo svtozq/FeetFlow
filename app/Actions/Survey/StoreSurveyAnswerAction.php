@@ -9,14 +9,17 @@ use Illuminate\Support\Facades\DB;
 
 final class StoreSurveyAnswerAction
 {
+
     public function __construct() {}
+
+
 
     /**
      * @return array<int, \App\Models\SurveyAnswer>
      */
     public function handle(SurveyAnswerDTO $dto): array
     {
-        return DB::transaction(function () use ($dto) {
+        return DB::transaction(function () use ( $dto) {
             $created = [];
 
             foreach ($dto->answers as $answerData) {
@@ -39,8 +42,10 @@ final class StoreSurveyAnswerAction
                 ]);
             }
 
+            $lastAnswer = end($created);
+
             // call event SurveyAnswerSubmitted
-            event(new SurveyAnswerSubmitted($dto->survey, $created, $dto->respondent));
+            event(new SurveyAnswerSubmitted($dto->survey, $created, $dto->respondent,$lastAnswer));
 
 
             return $created;
