@@ -8,4 +8,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('app:check-for-survey-to-close')->dailyAt('21:53');
+Schedule::command('app:check-for-survey-to-close')
+    ->dailyAt('23:22')
+    ->withoutOverlapping();

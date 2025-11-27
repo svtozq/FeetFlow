@@ -30,11 +30,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Event::listen(
-            SurveyAnswerSubmitted::class,
+        //Event::listen(
+            //SurveyAnswerSubmitted::class,
             //SendNewAnswerNotification::class,
-            SendFinalReportOnClose::class
-
-        );
+            //SendFinalReportOnClose::class
+        //);
     }
 }
