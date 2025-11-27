@@ -34,6 +34,24 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+//Organization
+    //Management of organization
+    Route::get('/organizations', [OrganizationController::class, 'index'])
+        ->name('organizations.index');
+
+    Route::post('/organizations/create', [OrganizationController::class, 'createOrganization'])
+        ->name('organizations.store');
+
+    Route::get('/organizations/{organization}/edit', [OrganizationController::class, 'editOrganization'])
+        ->name('organizations.edit');
+
+    Route::put('/organizations/{organization}/update', [OrganizationController::class, 'updateOrganization'])
+        ->name('organizations.update');
+
+    Route::delete('/organizations/{organization}/delete', [OrganizationController::class, 'deleteOrganization'])
+        ->name('organizations.delete');
+
 //SURVEYS
     // Display surveys
     Route::get('/organizations/{organization}/surveys', [SurveyController::class, 'index'])
@@ -76,32 +94,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/surveys/{survey}/thank-you', [SurveyController::class, 'thankYou'])
         ->name('survey.answerThankYou');
-
-
-
-
-
-
-
-//Organization
-    //Management of organization
-    Route::get('/organizations', [OrganizationController::class, 'index'])
-        ->name('organizations.index');
-
-    Route::post('/organizations/create', [OrganizationController::class, 'createOrganization'])
-        ->name('organizations.store');
-
-    Route::get('/organizations/{organization}/edit', [OrganizationController::class, 'editOrganization'])
-        ->name('organizations.edit');
-
-    Route::put('/organizations/{organization}/update', [OrganizationController::class, 'updateOrganization'])
-        ->name('organizations.update');
-
-    Route::delete('/organizations/{organization}/delete', [OrganizationController::class, 'deleteOrganization'])
-        ->name('organizations.delete');
-
-
-
 
 });
 
