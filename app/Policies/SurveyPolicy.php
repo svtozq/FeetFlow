@@ -21,4 +21,9 @@ class SurveyPolicy
     {
         return $user->id === $survey->user_id || $user->is_admin;
     }
+
+    public function share(User $user, Survey $survey): bool
+    {
+        return $user->id === $survey->user_id || $user->is_admin;
+    }
 }

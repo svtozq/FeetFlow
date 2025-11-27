@@ -30,6 +30,16 @@ class SurveyController extends Controller
         return view('results');
     }
 
+    public function share($token): View
+    {
+        $survey = Survey::where('token', $token)->first();
+
+        return view('surveys.answer', [
+            'token' => $token,
+            'survey' => $survey
+        ]);
+    }
+
     public function index(Organization $organization)
     {
         // for display the surveys of this organization
@@ -136,7 +146,7 @@ class SurveyController extends Controller
 
     public function submitAnswer(StoreSurveyAnswerRequest $request, Survey $survey, StoreSurveyAnswerAction $action)
     {
-        $dto = SurveyAnswerDTO::fromRequest($request, $survey, auth()->user());
+        $dto = SurveyAnswerDTO::fromRequest($request, $survey, auth()->id());
 
         $action->handle($dto);
 

@@ -19,6 +19,6 @@ class SurveyAnswerSubmitted
     public function __construct(
         public readonly Survey $survey,
         public readonly array $answers,
-        public readonly ?User $respondent,
+        public readonly ?int $user_id,
     ) {}
 }

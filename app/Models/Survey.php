@@ -14,6 +14,7 @@ class Survey extends Model
         'user_id',
         'title',
         'description',
+        'token',
         'start_date',
         'end_date',
         'closed',

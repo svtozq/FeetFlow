@@ -12,10 +12,10 @@ final class SurveyAnswerDTO
         public readonly Survey $survey,
         /** @var array<int, array{survey_question_id:int, answer:mixed}> */
         public readonly array $answers,
-        public readonly ?User $respondent,
+        public readonly ?int $user_id,
     ) {}
 
-    public static function fromRequest(Request $request, Survey $survey, ?User $user): self
+    public static function fromRequest(Request $request, Survey $survey, ?int $user_id): self
     {
         // answers[0][survey_question_id], answers[0][answer], ...
         $answers = $request->input('answers', []);
@@ -23,7 +23,7 @@ final class SurveyAnswerDTO
         return new self(
             survey: $survey,
             answers: $answers,
-            respondent: $user,
+            user_id: $user_id,
         );
     }
 }

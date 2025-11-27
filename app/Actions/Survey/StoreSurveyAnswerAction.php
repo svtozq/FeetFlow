@@ -34,13 +34,13 @@ final class StoreSurveyAnswerAction
                 $created[] = SurveyAnswer::create([
                     'survey_id'          => $dto->survey->id,
                     'survey_question_id' => $answerData['survey_question_id'],
-                    'user_id'            => $dto->respondent?->id,
+                    'user_id'            => $dto->user_id,
                     'answer'             => $answer,
                 ]);
             }
 
             // call event SurveyAnswerSubmitted
-            event(new SurveyAnswerSubmitted($dto->survey, $created, $dto->respondent));
+            event(new SurveyAnswerSubmitted($dto->survey, $created, $dto->user_id));
 
             return $created;
         });
