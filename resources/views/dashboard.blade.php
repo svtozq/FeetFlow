@@ -13,14 +13,5 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <form method="POST" action="{{ route('results.chart') }}">
-            @csrf
-                <input type="text" id="input1" name="input1" class="border-black" placeholder="right answers">
-                <input type="text" id="input2" name="input2" class="border-black" placeholder="wrong answers">
-                <button type="submit" class="chartButton border-black">Finish survey</button>
-        </form>
-        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </x-app-layout>

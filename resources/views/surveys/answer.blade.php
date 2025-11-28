@@ -1,4 +1,7 @@
 <x-guest-layout>
+    @if(!now()->between($survey->start_date, $survey->end_date))
+        <p class="text-gray-600">Le Sondage n'est pas encore disponible, ou a expiré..</p>
+    @else
     <h1 class="text-2xl font-bold mb-2">{{ $survey->title }}</h1>
     <p class="mb-6">{{ $survey->description }}</p>
 
@@ -69,4 +72,5 @@
         </button>
 
     </form>
+    @endif
 </x-guest-layout>

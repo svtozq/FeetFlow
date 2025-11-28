@@ -15,6 +15,8 @@ use App\Http\Requests\Survey\StoreSurveyRequest;
 use App\Http\Requests\Survey\UpdateSurveyRequest;
 use App\Models\Organization;
 use App\Models\Survey;
+use App\Models\SurveyAnswer;
+use App\Models\SurveyQuestion;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 
@@ -26,12 +28,14 @@ class SurveyController extends Controller
      * @param Request $request
      * @return View
      */
-    public function chart(Request $request): View
-    {
-        $right = $request->input('input1');
-        $wrong = $request->input('input2');
 
-        session(['right' => $right, 'wrong' => $wrong]);
+    public function chart($survey_id): View
+    {
+        $survey = Survey::where('survey_id', $survey_id)->first();
+        $questions = SurveyQuestion::where('survey_id', $survey_id)->get();
+        $answers = SurveyAnswer::where('survey_id', $survey_id)->get();
+
+        //session(['right' => $right, 'wrong' => $wrong]);
         return view('results');
     }
 
@@ -245,5 +249,11 @@ class SurveyController extends Controller
             ->route('survey.answerThankYou', $survey)
             ->with('success', 'Merci pour votre participation !');
     }
+
+
+
+
+
+
 
 }

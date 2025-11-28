@@ -89,8 +89,8 @@
 
 
                                     @can('share', $survey)
-                                    <!-- Actions and Modal: wrap both button and modal in the same x-data -->
                                     <div x-data="{ open: false }" class="relative">
+                                        <!-- Display share modal -->
                                         <button
                                             @click="open = true"
                                             class="bg-green-500 text-black font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-600 transition"
@@ -98,7 +98,7 @@
                                             Partager
                                         </button>
 
-                                        <!-- Modal Background -->
+                                        <!-- Modal content -->
                                         <div
                                             x-show="open"
                                             x-cloak
