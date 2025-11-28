@@ -22,7 +22,6 @@ Route::get('/results', function () {
 
 Route::post('/results', [SurveyController::class, 'chart'])->name('results.chart');
 
-// Display surveys
 Route::get('/survey/{token}', [SurveyController::class, 'share'])
     ->name('survey.share');
 
