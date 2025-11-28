@@ -11,9 +11,8 @@
     Une nouvelle réponse vient d'être soumise par un utilisateur.
 </p>
 
-<p><strong>Sondage ID :</strong> {{ $answer->survey_id }}</p>
-<p><strong>Utilisateur ID :</strong> {{ $answer->user_id }}</p>
-<p><strong>Réponse :</strong> {{ $answer->answer }}</p>
+
+<p><strong>Sondage concerné :</strong> {{ $survey->title }}</p>
 
 <hr>
 <small>Mail envoyé automatiquement par le système.</small>

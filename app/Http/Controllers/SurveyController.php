@@ -237,7 +237,7 @@ class SurveyController extends Controller
     public function submitAnswer(StoreSurveyAnswerRequest $request, Survey $survey, StoreSurveyAnswerAction $action)
     {
         $this->authorize('view', $survey);
-        $dto = SurveyAnswerDTO::fromRequest($request, $survey, auth()->id());
+        $dto = SurveyAnswerDTO::fromRequest($request, $survey, auth()->user());
 
         $action->handle($dto);
 

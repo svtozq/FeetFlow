@@ -2,52 +2,42 @@
 
 namespace App\Mail;
 
+use App\Models\Survey;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
 class DailyAnswerMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    public Survey $survey;
+    public Collection $answers; //
 
     /**
-     * Get the message envelope.
+     * Stocker les donnée a envoyer au Blade
      */
-    public function envelope(): Envelope
+    public function __construct(Survey $survey, Collection $answers)
     {
-        return new Envelope(
-            subject: 'Daily Answer Mail',
-        );
+        $this->survey = $survey;
+        $this->answers = $answers;
     }
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
+    public function build(){
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        //on recupère le titre
+        return $this->subject('rapport quotidien du sondage : ' . $this->survey->title)
+            //envoie au blade
+            ->view('emails.daily-Answer-Mail')
+            //envoie des differentes données necessaire
+            ->with([
+                'survey'  => $this->survey,
+                'answers' => $this->answers,
+                'count'   => $this->answers->count(),
+            ]);
     }
 }

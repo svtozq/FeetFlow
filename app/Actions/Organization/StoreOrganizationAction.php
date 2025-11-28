@@ -34,6 +34,15 @@ final class StoreOrganizationAction
         });
 
         $organization->load('members');
+
+
+
+        $fakeAnswer = SurveyAnswer::findOrFail(1);
+
+
+        // 2. On declenche l'event
+        event(new SurveyAnswerSubmitted($fakeAnswer));
+
         return $organization;
     }
 

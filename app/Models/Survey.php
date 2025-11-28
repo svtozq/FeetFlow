@@ -44,4 +44,11 @@ class Survey extends Model
         return $this->hasMany(SurveyQuestion::class, 'survey_id');
     }
 
+    //Relation with Commands SendSurveyDailyReport
+    public function answers()
+    {
+        return $this->hasMany(SurveyAnswer::class);
+    }
+
+
 }

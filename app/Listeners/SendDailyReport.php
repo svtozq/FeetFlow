@@ -7,28 +7,26 @@ use App\Mail\SurveySubmittedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
+use App\Events\DailyAnswersThresholdReached;
 
-class SendDailyReport implements ShouldQueue
+
+
+
+
+
+class SendDailyReport
 {
-    use InteractsWithQueue;
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+
 
     /**
-     * Handle the event.
+     * Fonction declenché automatiquement lors de l'appel
      */
-    public function handle(object $event): void
+    public function handle(DailyAnswersThresholdReached $event): void
     {
-
         // celui qui crée le sondage
+        $surveyCreator = $event->survey->user;
 
-        $surveyCreator = $event->survey->surveyCreator;
-
-        Mail::to($surveyCreator->email)->send(new DailyAnswerMail($event->dailyAnswer));
+        //envoie du mail (sans Queue)
+        Mail::to($surveyCreator->email)->send(new DailyAnswerMail($event->survey,$event->answers));
     }
 }
